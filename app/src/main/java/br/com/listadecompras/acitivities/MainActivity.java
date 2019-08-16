@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void carregaToobar() {
-        hometbr.setTitle("");
+        hometbr.setTitle("Lista de Compras");
         setSupportActionBar(hometbr);
     }
 
