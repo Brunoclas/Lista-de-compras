@@ -2,9 +2,12 @@ package br.com.listadecompras.adapters;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.InputFilter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -34,17 +37,33 @@ public class ProdutoAdapter extends RecyclerView.Adapter<ProdutoHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ProdutoHolder produtoHolder, int i) {
+        produtoHolder.txtNomeProd.setFilters(new InputFilter[] {new InputFilter.LengthFilter(20)});
         produtoHolder.txtNomeProd.setText(produtos.get(i).getDescription());
-        produtoHolder.txtPrecoProd.setText(String.valueOf(produtos.get(i).getPreco()));
-        produtoHolder.txtQtdeProd.setText(String.valueOf(produtos.get(i).getQtde()));
+        produtoHolder.txtVlUnit.setText("Vl unit.: R$ " + String.format("%.2f", produtos.get(i).getPreco()));
+        double vlTotal = produtos.get(i).getPreco() * produtos.get(i).getQtde();
+        produtoHolder.txtVlTotal.setText("Vl Total: R$ " + String.format("%.2f", vlTotal));
+
+        if(produtos.get(i).getUnidMed().equals("Unidade")) {
+            produtoHolder.txtQtdeProd.setText("Quantidade: " + String.format("%.0f", produtos.get(i).getQtde()));
+        }else{
+            produtoHolder.txtQtdeProd.setText("Quantidade: " + produtos.get(i).getQtde());
+        }
+
+        Picasso.get()
+                .load(produtos.get(i).getThumbnail())
+                .resize(250, 280)
+                .centerInside()
+                .into(produtoHolder.imgProdList);
     }
 
     @Override
     public int getItemCount() {
-        if(produtos.equals(null) || produtos.equals("")){
-            return produtos.size();
+        try {
+                return produtos.size();
+        }catch (Exception e){
+            e.printStackTrace();
+            return 0;
         }
-        return 0;
     }
 
     public interface OnClickProdListener{

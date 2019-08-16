@@ -13,22 +13,21 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-        <activity android:name=".acitivities.ProdutoActivity"
+        <activity android:name=".acitivities.ItensHistoricoActivity"></activity>
+        <activity android:name=".acitivities.HistoricoActivity" />
+        <activity
+            android:name=".acitivities.ProdutoActivity"
+            android:label="Produto"
             android:parentActivityName=".acitivities.MainActivity"
-            android:theme="@style/AppThemeProd"
-            android:label="Produto">
-
-        </activity>
-
-
-        <activity android:name=".acitivities.MainActivity">
+            android:theme="@style/AppThemeProd" />
+        <activity
+            android:name=".acitivities.MainActivity"
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity> <!-- Activities Zxing -->
         <activity
             android:name=".zxing.client.android.CaptureActivity"

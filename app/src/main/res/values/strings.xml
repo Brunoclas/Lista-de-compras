@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ListaDeCompras</string>
+    <string name="app_name">Lista De Compras</string>
 
     <!-- Strings do Zxing -->
     <string name="app_picker_name">Aplicativos</string>

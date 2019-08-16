@@ -1,5 +1,6 @@
 package br.com.listadecompras.acitivities;
 
+import android.content.Intent;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,11 +16,23 @@ import android.widget.Toast;
 import com.squareup.picasso.Picasso;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 import br.com.listadecompras.R;
 import br.com.listadecompras.model.Produto;
+import br.com.listadecompras.model.ProdutoList;
 import br.com.listadecompras.model.ProdutoRealm;
 import br.com.listadecompras.realm.ConfRealm;
+import br.com.listadecompras.utils.Utils;
+import br.com.listadecompras.zxing.Result;
+import io.realm.MutableRealmInteger;
+import io.realm.Realm;
+import io.realm.RealmList;
+import io.realm.RealmObject;
+import io.realm.RealmResults;
+import okhttp3.internal.Util;
 
 public class ProdutoActivity extends AppCompatActivity {
 
@@ -65,7 +78,6 @@ public class ProdutoActivity extends AppCompatActivity {
                         salvaDadosRealm(produto);
                         Log.i("Response", String.valueOf(produto.getQtde()));
                         Log.i("Response", String.valueOf(produto.getPreco()));
-                        finish();
                     } else {
                         Toast.makeText(ProdutoActivity.this, "Selecionar a unidade de medida !", Toast.LENGTH_LONG).show();
                     }
@@ -75,25 +87,72 @@ public class ProdutoActivity extends AppCompatActivity {
         });
     }
 
-    private void salvaDadosRealm(Produto produto) {
+    private void salvaDadosRealm(final Produto produto) {
         try {
-            ProdutoRealm produtoRealm = new ProdutoRealm();
-            produtoRealm.setDescription(produto.getDescription());
-            produtoRealm.setGtin(produto.getGtin());
-            produtoRealm.setBarcode_image(produto.getBarcode_image());
-            produtoRealm.setThumbnail(produto.getThumbnail());
+            RealmResults<ProdutoRealm> produtoRealms = confRealm.realm().where(ProdutoRealm.class).findAll();
 
-            BigDecimal preco = new BigDecimal(String.valueOf(produto.getPreco()));
-            produtoRealm.setPreco(preco.doubleValue());
+            if(produtoRealms.size() >= 0) {
 
-            BigDecimal qtde = new BigDecimal(String.valueOf(produto.getQtde()));
-            produtoRealm.setQtde(qtde.doubleValue());
+//                produtoRealm1 = confRealm.realm().where(ProdutoRealm.class).equalTo("gtin", produto.getGtin()).findFirst();
+//
+//                if (produtoRealm1 == null) {
 
-            produtoRealm.setUnidMed(produto.getUnidMed());
+                ProdutoRealm produtoRealm = new ProdutoRealm();
+                confRealm.realm().beginTransaction();
+                if(produtoRealms.size() <= 0) {
+                    produtoRealm.setId(1L);
+                }else {
+                    produtoRealm.setId(confRealm.autoIncrementIdProduto());
+                }
+                produtoRealm.setDescription(produto.getDescription());
+                produtoRealm.setGtin(produto.getGtin());
+                produtoRealm.setBarcode_image(produto.getBarcode_image());
+                produtoRealm.setThumbnail(produto.getThumbnail());
 
-            confRealm.realm().beginTransaction();
-            confRealm.realm().copyToRealm(produtoRealm);
-            confRealm.realm().commitTransaction();
+                BigDecimal preco = new BigDecimal(String.valueOf(produto.getPreco()));
+                produtoRealm.setPreco(preco.doubleValue());
+
+                BigDecimal qtde = new BigDecimal(String.valueOf(produto.getQtde()));
+                produtoRealm.setQtde(qtde.doubleValue());
+
+                BigDecimal vlTotal = new BigDecimal(String.valueOf(produto.getPreco() * produto.getQtde()));
+                produtoRealm.setVl_total(vlTotal.doubleValue());
+                produto.setVl_total(vlTotal.doubleValue());
+                String date = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.getDefault()).format(new Date());
+                produtoRealm.setDataCad(date);
+
+                produtoRealm.setUnidMed(produto.getUnidMed());
+                produtoRealm.setStatus(Utils.EM_PROCESSAMENTO);
+
+//                RealmResults<ProdutoList> produtoLists = confRealm.realm().where(ProdutoList.class).findAll();
+//                Long id_lista = confRealm.realm().where(ProdutoList.class).max("id").longValue();
+//                if(produtoLists.size() <= 0) {
+//                    produtoRealm.setId_lista(1L);
+//                }else if(produtoLists.size() > 0 && produtoLists.){
+//
+//                }
+
+                confRealm.realm().copyToRealm(produtoRealm);
+                confRealm.realm().commitTransaction();
+                confRealm.realm().close();
+
+                if(confRealm.recebeListaListaProdutos().size() <= 0){
+                    salvaLista();
+                }else if(!confRealm.ultimaListaProduto().getStatus().equals(Utils.EM_PROCESSAMENTO)){
+                    salvaLista();
+                }
+
+                Bundle b = new Bundle();
+                b.putParcelable("produtoRealm", produtoRealm);
+                Intent i = new Intent();
+                i.putExtras(b);
+                setResult(RESULT_OK, i);
+                finish();
+
+//                } else {
+//                    Toast.makeText(this, "Produto ja esta cadastrado.", Toast.LENGTH_LONG).show();
+//                }
+           }
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -153,7 +212,7 @@ public class ProdutoActivity extends AppCompatActivity {
 
     private void inicializaComponentes() {
         txtNomeProd = findViewById(R.id.txtNomeProd);
-        imgProd = findViewById(R.id.imgProd);
+        imgProd = findViewById(R.id.imgProdList);
         imgCodBarras = findViewById(R.id.imgCodBarras);
         rdBtnKg = findViewById(R.id.rdBtnKg);
         rdBtnLt = findViewById(R.id.rdBtnLt);
@@ -164,4 +223,22 @@ public class ProdutoActivity extends AppCompatActivity {
         edtInpQtde = findViewById(R.id.edtInpQtde);
         edtInpValor = findViewById(R.id.edtInpValor);
     }
+
+    private void salvaLista(){
+        ProdutoList produtoList = new ProdutoList();
+        RealmResults<ProdutoList> produtoLists = confRealm.recebeListaListaProdutos();
+        confRealm.realm().beginTransaction();
+        if(produtoLists.size() <= 0){
+            produtoList.setId(1L);
+        }else{
+            produtoList.setId(confRealm.autoIncrementIdProdutoLista());
+        }
+        String date = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.getDefault()).format(new Date());
+        produtoList.setDt_criacao(date);
+        produtoList.setStatus(Utils.EM_PROCESSAMENTO);
+        confRealm.realm().copyToRealm(produtoList);
+        confRealm.realm().commitTransaction();
+        confRealm.realm().close();
+    }
+
 }
