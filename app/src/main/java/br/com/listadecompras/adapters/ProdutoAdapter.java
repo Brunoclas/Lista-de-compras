@@ -15,12 +15,18 @@ import br.com.listadecompras.R;
 import br.com.listadecompras.holders.ProdutoHolder;
 import br.com.listadecompras.model.Produto;
 import br.com.listadecompras.model.ProdutoRealm;
+import br.com.listadecompras.realm.ConfRealm;
+import br.com.listadecompras.utils.Utils;
+import io.realm.Realm;
+import io.realm.RealmMigration;
 import io.realm.RealmResults;
+import io.realm.Sort;
 
 public class ProdutoAdapter extends RecyclerView.Adapter<ProdutoHolder> {
 
     private RealmResults<ProdutoRealm> produtos;
     private OnClickProdListener onClickProdListener;
+    private ConfRealm confRealm;
 
     public ProdutoAdapter(RealmResults<ProdutoRealm> produtos, OnClickProdListener onClickProdListener) {
         this.produtos = produtos;
@@ -36,7 +42,7 @@ public class ProdutoAdapter extends RecyclerView.Adapter<ProdutoHolder> {
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ProdutoHolder produtoHolder, int i) {
+    public void onBindViewHolder(@NonNull ProdutoHolder produtoHolder, final int i) {
         produtoHolder.txtNomeProd.setFilters(new InputFilter[] {new InputFilter.LengthFilter(20)});
         produtoHolder.txtNomeProd.setText(produtos.get(i).getDescription());
         produtoHolder.txtVlUnit.setText("Vl unit.: R$ " + String.format("%.2f", produtos.get(i).getPreco()));
@@ -51,9 +57,25 @@ public class ProdutoAdapter extends RecyclerView.Adapter<ProdutoHolder> {
 
         Picasso.get()
                 .load(produtos.get(i).getThumbnail())
-                .resize(250, 280)
+                .resize(350, 300)
                 .centerInside()
                 .into(produtoHolder.imgProdList);
+
+        produtoHolder.btnDeleteProd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                confRealm = new ConfRealm();
+                final RealmResults<ProdutoRealm> produtoRealms = confRealm.realm().where(ProdutoRealm.class).equalTo("status", Utils.EM_PROCESSAMENTO).findAll().sort("id", Sort.DESCENDING);
+
+                confRealm.realm().executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        ProdutoRealm produtoRealm =  produtoRealms.get(i);
+                        produtoRealm.deleteFromRealm();
+                    }
+                });
+            }
+        });
     }
 
     @Override

@@ -7,10 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import br.com.listadecompras.R;
-import br.com.listadecompras.acitivities.HistoricoActivity;
-import br.com.listadecompras.acitivities.ProdutoActivity;
 import br.com.listadecompras.holders.HistoricoHolder;
-import br.com.listadecompras.holders.ProdutoHolder;
 import br.com.listadecompras.model.ProdutoList;
 import io.realm.RealmResults;
 

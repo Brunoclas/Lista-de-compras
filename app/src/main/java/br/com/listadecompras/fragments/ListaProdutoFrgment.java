@@ -104,6 +104,7 @@ public class ListaProdutoFrgment extends Fragment implements ProdutoAdapter.OnCl
     }
 
 
+
     @Override
     public void onStart() {
         super.onStart();
@@ -137,6 +138,4 @@ public class ListaProdutoFrgment extends Fragment implements ProdutoAdapter.OnCl
     private void alerta(String msg){
         Toast.makeText(this.getContext(), msg, Toast.LENGTH_SHORT).show();
     }
-
-
 }

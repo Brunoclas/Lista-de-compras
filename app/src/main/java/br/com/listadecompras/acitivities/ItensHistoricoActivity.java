@@ -21,7 +21,6 @@ public class ItensHistoricoActivity extends AppCompatActivity {
 //        position = b.getInt("position");
 //        carregaFragment();
 
-
     }
 
     private void inicializaCampos() {

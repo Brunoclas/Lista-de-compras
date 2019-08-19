@@ -287,13 +287,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-//        alerta("MainActivity - onStart");
+        alerta("MainActivity - onStart");
     }
 
     @Override
     public void onResume() {
         super.onResume();
-//        alerta("MainActivity - onResume");
+        alerta("MainActivity - onResume");
             carregaFragment();
             calculaDados();
             txtInpCodigo.setText("");
@@ -302,19 +302,19 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onPause() {
         super.onPause();
-//        alerta("MainActivity - onPause");
+        alerta("MainActivity - onPause");
     }
 
     @Override
     public void onStop() {
         super.onStop();
-//        alerta("MainActivity - onStop");
+        alerta("MainActivity - onStop");
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-//        alerta("MainActivity - onDestroy");
+        alerta("MainActivity - onDestroy");
     }
 
     @Override

@@ -1,13 +1,6 @@
 package br.com.listadecompras.model;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-
-import br.com.listadecompras.utils.Utils;
-import io.realm.MutableRealmInteger;
-import io.realm.RealmList;
 import io.realm.RealmObject;
-import io.realm.annotations.PrimaryKey;
 
 public class ProdutoList extends RealmObject {
 

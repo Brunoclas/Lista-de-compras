@@ -4,6 +4,7 @@ package br.com.listadecompras.holders;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -15,6 +16,7 @@ public class ProdutoHolder extends RecyclerView.ViewHolder implements View.OnCli
 
     public TextView txtNomeProd, txtVlUnit, txtQtdeProd, txtVlTotal;
     public ImageView imgProdList;
+    public ImageButton btnDeleteProd;
     ProdutoAdapter.OnClickProdListener onClickProdListener;
 
     public ProdutoHolder(@NonNull View itemView, ProdutoAdapter.OnClickProdListener onClickProdListener) {
@@ -25,6 +27,7 @@ public class ProdutoHolder extends RecyclerView.ViewHolder implements View.OnCli
         txtQtdeProd = itemView.findViewById(R.id.txtQtdeProd);
         txtVlTotal = itemView.findViewById(R.id.txtVlTotal);
         imgProdList = itemView.findViewById(R.id.imgProdList);
+        btnDeleteProd = itemView.findViewById(R.id.btnDeleteProd);
         itemView.setOnClickListener(this);
     }
 
