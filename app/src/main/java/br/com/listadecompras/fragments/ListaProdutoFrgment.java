@@ -54,25 +54,7 @@ public class ListaProdutoFrgment extends Fragment implements ProdutoAdapter.OnCl
             linearLayoutManager.setStackFromEnd(true);
             linearLayoutManager.setReverseLayout(true);
             prodRecycler.setLayoutManager(gridLayoutManager);
-            ProdutoAdapter produtoAdapter = new ProdutoAdapter(carregaDados(), this);
-            prodRecycler.setAdapter(produtoAdapter);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-    }
-
-    private void preencheListaItemHistorico(){
-        try {
-            RealmResults<ProdutoRealm> produtoRealms = confRealm.realm().where(ProdutoRealm.class).equalTo("id_lista", position).sort("id", Sort.DESCENDING).findAll();
-            StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
-            staggeredGridLayoutManager.setReverseLayout(false);
-            GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
-            gridLayoutManager.setReverseLayout(false);
-            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-            linearLayoutManager.setStackFromEnd(true);
-            linearLayoutManager.setReverseLayout(true);
-            prodRecycler.setLayoutManager(gridLayoutManager);
-            ProdutoAdapter produtoAdapter = new ProdutoAdapter(produtoRealms, this);
+            ProdutoAdapter produtoAdapter = new ProdutoAdapter(carregaDados(), this, getActivity());
             prodRecycler.setAdapter(produtoAdapter);
         }catch (Exception e){
             e.printStackTrace();
@@ -103,36 +85,35 @@ public class ListaProdutoFrgment extends Fragment implements ProdutoAdapter.OnCl
 
     }
 
-
-
     @Override
     public void onStart() {
         super.onStart();
+//        alerta("ListaProdutoFrgment - onStart");
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if(activity == 1) {
+//        alerta("ListaProdutoFrgment - onResume");
             preencheLista();
-        }else if(activity == 2){
-            preencheListaItemHistorico();
-        }
     }
 
     @Override
     public void onPause() {
         super.onPause();
+//        alerta("ListaProdutoFrgment - onPause");
     }
 
     @Override
     public void onStop() {
         super.onStop();
+//        alerta("ListaProdutoFrgment - onStop");
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
+//        alerta("ListaProdutoFrgment - onDestroy");
     }
 
     private void alerta(String msg){

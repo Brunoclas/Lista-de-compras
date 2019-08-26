@@ -68,7 +68,7 @@
                 android:textColor="#99000000"
                 android:textSize="14sp"
                 android:textStyle="bold"
-                app:layout_constraintEnd_toStartOf="@+id/btnDeleteProd"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/txtNomeProd"
                 tools:text="Qtde" />
@@ -81,7 +81,7 @@
                 android:textColor="#99000000"
                 android:textSize="14sp"
                 android:textStyle="bold"
-                app:layout_constraintEnd_toStartOf="@+id/btnDeleteProd"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/txtQtdeProd"
                 tools:text="Vl Unit." />
@@ -94,22 +94,11 @@
                 android:textColor="#99000000"
                 android:textSize="14sp"
                 android:textStyle="bold"
-                app:layout_constraintEnd_toStartOf="@+id/btnDeleteProd"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/txtVlUnit"
                 tools:text="Vl Total" />
 
-            <ImageButton
-                android:id="@+id/btnDeleteProd"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_marginBottom="8dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@+id/view2"
-                app:layout_constraintTop_toBottomOf="@+id/txtVlUnit"
-                app:layout_constraintVertical_bias="0.0"
-                app:srcCompat="@drawable/ic_delete_black_18dp" />
         </android.support.constraint.ConstraintLayout>
 
     </android.support.v7.widget.CardView>

@@ -3,6 +3,7 @@ package br.com.listadecompras.acitivities;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Network;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputEditText;
@@ -11,12 +12,12 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,7 +37,7 @@ import br.com.listadecompras.utils.Utils;
 import br.com.listadecompras.webservices.IService;
 import br.com.listadecompras.webservices.UrlUtils;
 import br.com.listadecompras.zxing.client.android.CaptureActivity;
-import io.realm.Realm;
+import br.com.listadecompras.zxing.client.android.PreferencesActivity;
 import io.realm.RealmResults;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -61,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar hometbr;
     private double vl_total = 0;
     private long qtde_total = 0;
+    private double vlTotal = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +86,13 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()){
             case R.id.historico:
                     startActivity(new Intent(MainActivity.this, HistoricoActivity.class));
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                break;
+            case R.id.menu_settings:
+                Intent intent = new Intent();
+                intent.setClassName(this, PreferencesActivity.class.getName());
+                startActivity(intent);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 break;
         }
         return true;
@@ -253,7 +262,6 @@ public class MainActivity extends AppCompatActivity {
         }
         if(resultCode == Activity.RESULT_OK && requestCode == 2){
             try {
-
                 produtoRealm = data.getParcelableExtra("produtoRealm");
                 Log.i("Response", produtoRealm.toString());
             }catch (Exception e){
@@ -266,7 +274,7 @@ public class MainActivity extends AppCompatActivity {
     public void calculaDados(){
         try {
             if(!confRealm.ultimaListaProduto().getStatus().equals(Utils.FECHADO)) {
-                double vlTotal = 0;
+
                 RealmResults<ProdutoRealm> produtos = confRealm.realm().where(ProdutoRealm.class).equalTo("status", Utils.EM_PROCESSAMENTO).findAll();
                 if (produtos.size() > 0) {
                     txtQtdeItem.setText("Itens: " + produtos.size());
@@ -287,13 +295,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        alerta("MainActivity - onStart");
+//        alerta("MainActivity - onStart");
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        alerta("MainActivity - onResume");
+//        alerta("MainActivity - onResume");
             carregaFragment();
             calculaDados();
             txtInpCodigo.setText("");
@@ -302,19 +310,19 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onPause() {
         super.onPause();
-        alerta("MainActivity - onPause");
+//        alerta("MainActivity - onPause");
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        alerta("MainActivity - onStop");
+//        alerta("MainActivity - onStop");
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        alerta("MainActivity - onDestroy");
+//        alerta("MainActivity - onDestroy");
     }
 
     @Override

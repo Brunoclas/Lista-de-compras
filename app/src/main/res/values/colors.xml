@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#00c853</color>
-    <color name="colorPrimaryDark">#009624</color>
-    <color name="colorAccent">#fff59d</color>
-    <color name="colorLight">#6ec6ff</color>
+    <color name="colorPrimary">#4CAF50</color>
+    <color name="colorPrimaryDark">#388E3C</color>
+    <color name="colorAccent">#FFC107</color>
+    <color name="colorLight">#C8E6C9</color>
 
     <!-- Cores do Zxing -->
     <color name="contents_text">#ff000000</color>

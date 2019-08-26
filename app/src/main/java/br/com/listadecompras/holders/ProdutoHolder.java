@@ -35,6 +35,7 @@ public class ProdutoHolder extends RecyclerView.ViewHolder implements View.OnCli
     public void onClick(View v) {
         onClickProdListener.onClickProdListener(getAdapterPosition());
         Toast.makeText(v.getContext(), "Click - " + getAdapterPosition(), Toast.LENGTH_LONG).show();
+        
     }
 
 }

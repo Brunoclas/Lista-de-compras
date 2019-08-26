@@ -8,9 +8,9 @@
         android:id="@+id/menu_history"
         android:title="Historico"/>
 
-    <item
-        android:id="@+id/menu_settings"
-        android:title="Configuracoes"/>
+    <!--<item-->
+        <!--android:id="@+id/menu_settings"-->
+        <!--android:title="Configuracoes"/>-->
 
     <item
         android:id="@+id/menu_help"

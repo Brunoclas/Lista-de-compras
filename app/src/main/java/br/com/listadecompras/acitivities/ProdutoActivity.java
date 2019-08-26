@@ -67,21 +67,24 @@ public class ProdutoActivity extends AppCompatActivity {
         btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 selectionaRadioButton();
-                if (!edtInpQtde.getText().equals("") || !edtInpQtde.getText().equals("")) {
-                    if (rdBtnKg.isChecked() || rdBtnLt.isChecked() || rdBtnUn.isChecked()){
+                try {
+                    if (!edtInpQtde.getText().equals("") || !edtInpQtde.getText().equals("")) {
+                        if (rdBtnKg.isChecked() || rdBtnLt.isChecked() || rdBtnUn.isChecked()) {
 //                        BigDecimal qtde = new BigDecimal(edtInpQtde.getText().toString());
-                        produto.setQtde(Double.parseDouble((edtInpQtde.getText().toString())));
+                            produto.setQtde(Double.parseDouble((edtInpQtde.getText().toString())));
 //                        BigDecimal preco = new BigDecimal(edtInpValor.getText().toString());
-                        produto.setPreco(Double.parseDouble(edtInpValor.getText().toString()));
-                        salvaDadosRealm(produto);
-                        Log.i("Response", String.valueOf(produto.getQtde()));
-                        Log.i("Response", String.valueOf(produto.getPreco()));
-                    } else {
-                        Toast.makeText(ProdutoActivity.this, "Selecionar a unidade de medida !", Toast.LENGTH_LONG).show();
-                    }
+                            produto.setPreco(Double.parseDouble(edtInpValor.getText().toString()));
+                            salvaDadosRealm(produto);
+                            Log.i("Response", String.valueOf(produto.getQtde()));
+                            Log.i("Response", String.valueOf(produto.getPreco()));
+                        } else {
+                            Toast.makeText(ProdutoActivity.this, "Selecionar a unidade de medida !", Toast.LENGTH_LONG).show();
+                        }
 
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
                 }
             }
         });

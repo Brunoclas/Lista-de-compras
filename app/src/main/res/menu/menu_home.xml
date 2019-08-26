@@ -3,4 +3,7 @@
     <item
         android:id="@+id/historico"
         android:title="Historico"/>
+    <item
+        android:id="@+id/menu_settings"
+        android:title="Configuracoes"/>
 </menu>

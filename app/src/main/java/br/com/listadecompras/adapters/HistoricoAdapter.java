@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.squareup.picasso.Picasso;
+
 import br.com.listadecompras.R;
 import br.com.listadecompras.holders.HistoricoHolder;
 import br.com.listadecompras.model.ProdutoList;
@@ -35,6 +37,7 @@ public class HistoricoAdapter extends RecyclerView.Adapter<HistoricoHolder> {
             historicoHolder.txtDt.setText(produtoLists.get(i).getDt_criacao());
             historicoHolder.txtVlTotal.setText("R$: " + String.format("%.2f",produtoLists.get(i).getVl_total()));
             historicoHolder.txtQtde.setText("Itens: " + (produtoLists.get(i).getQtde_itens()));
+
         }catch (Exception e){
             e.printStackTrace();
         }
