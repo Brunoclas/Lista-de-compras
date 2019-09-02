@@ -271,6 +271,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void calculaDados(){
         try {
+            vlTotal = 0;
             if(!confRealm.ultimaListaProduto().getStatus().equals(Utils.FECHADO)) {
 
                 RealmResults<ProdutoRealm> produtos = confRealm.realm().where(ProdutoRealm.class).equalTo("status", Utils.EM_PROCESSAMENTO).findAll();

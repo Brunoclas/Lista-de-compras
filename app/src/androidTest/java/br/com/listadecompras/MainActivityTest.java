@@ -49,7 +49,6 @@ public class MainActivityTest {
         onView(withId(R.id.txtVlTotalLista)).check(matches(isDisplayed()));
     }
 
-
     @Test
     public void teste_busca_codigo(){
         onView(withId(R.id.txtInpCodigo)).perform(typeText("7891000414002"), closeSoftKeyboard());

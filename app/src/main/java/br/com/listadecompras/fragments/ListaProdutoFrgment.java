@@ -1,5 +1,8 @@
 package br.com.listadecompras.fragments;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProvider;
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -20,6 +23,7 @@ import br.com.listadecompras.adapters.ProdutoAdapter;
 import br.com.listadecompras.model.ProdutoRealm;
 import br.com.listadecompras.realm.ConfRealm;
 import br.com.listadecompras.utils.Utils;
+import br.com.listadecompras.viewmodel.ProdutoViewModel;
 import io.realm.RealmResults;
 import io.realm.Sort;
 import okhttp3.internal.Util;
@@ -30,6 +34,7 @@ public class ListaProdutoFrgment extends Fragment implements ProdutoAdapter.OnCl
     private RecyclerView prodRecycler;
     private ConfRealm confRealm;
     private static int activity, position;
+    private RealmResults<ProdutoRealm> produtoRealms;
 
     @Nullable
     @Override
@@ -62,10 +67,16 @@ public class ListaProdutoFrgment extends Fragment implements ProdutoAdapter.OnCl
     }
 
     private RealmResults<ProdutoRealm> carregaDados() {
-        RealmResults<ProdutoRealm> produtoRealms = null ;
+        ProdutoViewModel produtoViewModel;
         try {
             if(!confRealm.ultimaListaProduto().getStatus().equals(Utils.FECHADO)) {
-                produtoRealms = confRealm.realm().where(ProdutoRealm.class).equalTo("status", Utils.EM_PROCESSAMENTO).findAll().sort("dataCad", Sort.DESCENDING);
+                ProdutoViewModel model = ViewModelProviders.of(this).get(ProdutoViewModel.class);
+
+                 model.getProduto().observe(this, produtos -> {
+                     produtoRealms = produtos;
+                 });
+
+//                produtoRealms = confRealm.realm().where(ProdutoRealm.class).equalTo("status", Utils.EM_PROCESSAMENTO).findAll().sort("dataCad", Sort.DESCENDING);
 
             }
         }catch (Exception e){
