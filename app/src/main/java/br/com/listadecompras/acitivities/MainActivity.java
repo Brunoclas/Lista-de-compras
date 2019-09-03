@@ -2,6 +2,7 @@ package br.com.listadecompras.acitivities;
 
 import android.Manifest;
 import android.app.Activity;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -32,6 +33,7 @@ import br.com.listadecompras.model.ProdutoRealm;
 import br.com.listadecompras.realm.ConfRealm;
 import br.com.listadecompras.utils.Permissions;
 import br.com.listadecompras.utils.Utils;
+import br.com.listadecompras.viewmodel.ProdutoViewModel;
 import br.com.listadecompras.webservices.IService;
 import br.com.listadecompras.webservices.UrlUtils;
 import br.com.listadecompras.zxing.client.android.CaptureActivity;
@@ -135,29 +137,39 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 try {
                     gtin = txtInpCodigo.getText().toString();
-                    Call<Produto> callProd = UrlUtils.getService().recuperaProd(gtin);
-                    callProd.enqueue(new Callback<Produto>() {
-                        @Override
-                        public void onResponse(Call<Produto> call, Response<Produto> response) {
-                            if (response.isSuccessful()) {
-                                Produto produto = response.body();
-                                Log.i("Response", produto.toString());
-                                Bundle bundle = new Bundle();
+                    ProdutoViewModel model = ViewModelProviders.of(MainActivity.this).get(ProdutoViewModel.class);
+                    model.getProduto(gtin).observe(MainActivity.this, produto -> {
+                        Bundle bundle = new Bundle();
                                 bundle.putParcelable("produto", produto);
                                 Intent i = new Intent(MainActivity.this, ProdutoActivity.class);
                                 i.putExtras(bundle);
                                 startActivityForResult(i, 2);
-                            }else{
-                                Toast.makeText(MainActivity.this, "Produto nāo encontrado", Toast.LENGTH_LONG).show();
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(Call<Produto> call, Throwable t) {
-                            t.getStackTrace();
-                            Log.i("ResponseError", t.getMessage());
-                        }
                     });
+
+
+//                    Call<Produto> callProd = UrlUtils.getService().recuperaProd(gtin);
+//                    callProd.enqueue(new Callback<Produto>() {
+//                        @Override
+//                        public void onResponse(Call<Produto> call, Response<Produto> response) {
+//                            if (response.isSuccessful()) {
+//                                Produto produto = response.body();
+//                                Log.i("Response", produto.toString());
+//                                Bundle bundle = new Bundle();
+//                                bundle.putParcelable("produto", produto);
+//                                Intent i = new Intent(MainActivity.this, ProdutoActivity.class);
+//                                i.putExtras(bundle);
+//                                startActivityForResult(i, 2);
+//                            }else{
+//                                Toast.makeText(MainActivity.this, "Produto nāo encontrado", Toast.LENGTH_LONG).show();
+//                            }
+//                        }
+//
+//                        @Override
+//                        public void onFailure(Call<Produto> call, Throwable t) {
+//                            t.getStackTrace();
+//                            Log.i("ResponseError", t.getMessage());
+//                        }
+//                    });
                 }catch (Exception e){
                     e.printStackTrace();
                     Log.i("ResponseError", e.getMessage());
@@ -229,29 +241,29 @@ public class MainActivity extends AppCompatActivity {
             Log.i("Response", gtin);
 
             try {
-                Call<Produto> callProd = UrlUtils.getService().recuperaProd(gtin);
-                callProd.enqueue(new Callback<Produto>() {
-                    @Override
-                    public void onResponse(Call<Produto> call, Response<Produto> response) {
-                        if (response.isSuccessful()) {
-                            Produto produto = response.body();
-                            Log.i("Response", produto.toString());
-                            Bundle bundle = new Bundle();
-                            bundle.putParcelable("produto", produto);
-                            Intent i = new Intent(MainActivity.this, ProdutoActivity.class);
-                            i.putExtras(bundle);
-                            startActivity(i);
-                        }else{
-                            Toast.makeText(MainActivity.this, "Produto nāo encontrado", Toast.LENGTH_LONG).show();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<Produto> call, Throwable t) {
-                        t.getStackTrace();
-                        Log.i("ResponseError", t.getMessage());
-                    }
-                });
+//                Call<Produto> callProd = UrlUtils.getService().recuperaProd(gtin);
+//                callProd.enqueue(new Callback<Produto>() {
+//                    @Override
+//                    public void onResponse(Call<Produto> call, Response<Produto> response) {
+//                        if (response.isSuccessful()) {
+//                            Produto produto = response.body();
+//                            Log.i("Response", produto.toString());
+//                            Bundle bundle = new Bundle();
+//                            bundle.putParcelable("produto", produto);
+//                            Intent i = new Intent(MainActivity.this, ProdutoActivity.class);
+//                            i.putExtras(bundle);
+//                            startActivity(i);
+//                        }else{
+//                            Toast.makeText(MainActivity.this, "Produto nāo encontrado", Toast.LENGTH_LONG).show();
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onFailure(Call<Produto> call, Throwable t) {
+//                        t.getStackTrace();
+//                        Log.i("ResponseError", t.getMessage());
+//                    }
+//                });
             }catch (Exception e){
                 e.printStackTrace();
                 Log.i("ResponseError", e.getMessage());

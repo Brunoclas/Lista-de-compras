@@ -43,7 +43,7 @@ public class ProdutoActivity extends AppCompatActivity {
     private RadioGroup rdGroup;
     private Button btnOk, btnCancelar;
 
-    private Produto produto;
+    private ProdutoRealm produto;
     private ConfRealm confRealm;
 
     @Override
@@ -90,7 +90,7 @@ public class ProdutoActivity extends AppCompatActivity {
         });
     }
 
-    private void salvaDadosRealm(final Produto produto) {
+    private void salvaDadosRealm(final ProdutoRealm produto) {
         try {
             RealmResults<ProdutoRealm> produtoRealms = confRealm.realm().where(ProdutoRealm.class).findAll();
 

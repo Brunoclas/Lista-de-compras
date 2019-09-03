@@ -72,12 +72,10 @@ public class ListaProdutoFrgment extends Fragment implements ProdutoAdapter.OnCl
             if(!confRealm.ultimaListaProduto().getStatus().equals(Utils.FECHADO)) {
                 ProdutoViewModel model = ViewModelProviders.of(this).get(ProdutoViewModel.class);
 
-                 model.getProduto().observe(this, produtos -> {
+                 model.getListaProduto().observe(this, produtos -> {
                      produtoRealms = produtos;
                  });
-
 //                produtoRealms = confRealm.realm().where(ProdutoRealm.class).equalTo("status", Utils.EM_PROCESSAMENTO).findAll().sort("dataCad", Sort.DESCENDING);
-
             }
         }catch (Exception e){
             e.printStackTrace();

@@ -1,6 +1,7 @@
 package br.com.listadecompras.webservices;
 
 import br.com.listadecompras.model.Produto;
+import br.com.listadecompras.model.ProdutoRealm;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -11,6 +12,6 @@ public interface IService {
 
     @Headers("X-Cosmos-Token: UgqjdZ4FJ9_0W20LzisDYA")
     @GET("/gtins/{cod}")
-    Call<Produto> recuperaProd(@Path("cod") String cod);
+    Call<ProdutoRealm> recuperaProd(@Path("cod") String cod);
 
 }

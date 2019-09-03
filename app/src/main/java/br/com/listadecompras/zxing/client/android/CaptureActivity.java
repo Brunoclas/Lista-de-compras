@@ -503,29 +503,29 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     String dataLeitura = formatter.format(rawResult.getTimestamp());
 
     try {
-      Call<Produto> callProd = UrlUtils.getService().recuperaProd(dados);
-      callProd.enqueue(new Callback<Produto>() {
-        @Override
-        public void onResponse(Call<Produto> call, Response<Produto> response) {
-          if (response.isSuccessful()) {
-            Produto produto = response.body();
-            Log.i("Response", produto.toString());
-            Bundle bundle = new Bundle();
-            bundle.putParcelable("produto", produto);
-            Intent i = new Intent(CaptureActivity.this, ProdutoActivity.class);
-            i.putExtras(bundle);
-            startActivity(i);
-          }else{
-            Toast.makeText(CaptureActivity.this, "Produto nāo encontrado", Toast.LENGTH_LONG).show();
-          }
-        }
-
-        @Override
-        public void onFailure(Call<Produto> call, Throwable t) {
-          t.getStackTrace();
-          Log.i("ResponseError", t.getMessage());
-        }
-      });
+//      Call<Produto> callProd = UrlUtils.getService().recuperaProd(dados);
+//      callProd.enqueue(new Callback<Produto>() {
+//        @Override
+//        public void onResponse(Call<Produto> call, Response<Produto> response) {
+//          if (response.isSuccessful()) {
+//            Produto produto = response.body();
+//            Log.i("Response", produto.toString());
+//            Bundle bundle = new Bundle();
+//            bundle.putParcelable("produto", produto);
+//            Intent i = new Intent(CaptureActivity.this, ProdutoActivity.class);
+//            i.putExtras(bundle);
+//            startActivity(i);
+//          }else{
+//            Toast.makeText(CaptureActivity.this, "Produto nāo encontrado", Toast.LENGTH_LONG).show();
+//          }
+//        }
+//
+//        @Override
+//        public void onFailure(Call<Produto> call, Throwable t) {
+//          t.getStackTrace();
+//          Log.i("ResponseError", t.getMessage());
+//        }
+//      });
     }catch (Exception e){
       e.printStackTrace();
       Log.i("ResponseError", e.getMessage());
