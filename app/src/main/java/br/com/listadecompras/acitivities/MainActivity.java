@@ -33,6 +33,7 @@ import br.com.listadecompras.model.ProdutoRealm;
 import br.com.listadecompras.realm.ConfRealm;
 import br.com.listadecompras.utils.Permissions;
 import br.com.listadecompras.utils.Utils;
+import br.com.listadecompras.viewmodel.HistoricoViewModel;
 import br.com.listadecompras.viewmodel.ProdutoViewModel;
 import br.com.listadecompras.webservices.IService;
 import br.com.listadecompras.webservices.UrlUtils;
@@ -180,50 +181,64 @@ public class MainActivity extends AppCompatActivity {
         btnFinalizarCompras.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                try{
+
                 produtoList = new ProdutoList();
-                final ConfRealm confRealm = new ConfRealm();
 
-                if(confRealm.ultimaListaProduto().getStatus().equals(Utils.EM_PROCESSAMENTO)){
+                ProdutoViewModel model = ViewModelProviders.of(MainActivity.this).get(ProdutoViewModel.class);
+                model.getFinalizaProd().observe(MainActivity.this, vl_total ->{
+                    vlTotal = vl_total;
+                });
 
-                    confRealm.realm().beginTransaction();
-                    vl_total = 0;
-                    qtde_total = 0;
-                    RealmResults<ProdutoRealm> produtoRealms = confRealm.realm()
-                            .where(ProdutoRealm.class)
-                            .equalTo("status", Utils.EM_PROCESSAMENTO)
-                            .findAll();
-                    for(int i = 0; i < produtoRealms.size(); i++){
-                        vl_total += produtoRealms.get(i).getVl_total();
-                    }
-                    qtde_total += produtoRealms.size();
-                    produtoRealms.setLong("id_lista", confRealm.ultimaListaProduto().getId());
-                    produtoRealms.setString("status", Utils.FECHADO);
+                HistoricoViewModel model1 = ViewModelProviders.of(MainActivity.this).get(HistoricoViewModel.class);
+                model1.getSalvaLista(vlTotal);
 
-//                    confRealm.realm().copyToRealm(produtoRealms);
-                    confRealm.realm().copyToRealmOrUpdate(produtoRealms);
-                    confRealm.realm().commitTransaction();
-                    confRealm.realm().close();
+//                final ConfRealm confRealm = new ConfRealm();
 
-                    confRealm.realm().beginTransaction();
-                    produtoList = new ProdutoList();
-                    String date = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.getDefault()).format(new Date());
+//                if(confRealm.ultimaListaProduto().getStatus().equals(Utils.EM_PROCESSAMENTO)){
 
-                    RealmResults<ProdutoList> produtoListss = confRealm.realm()
-                            .where(ProdutoList.class)
-                            .equalTo("status", Utils.EM_PROCESSAMENTO)
-                            .findAll();
-                    produtoListss.setLong("qtde_itens", qtde_total);
-                    produtoListss.setDouble    ("vl_total", vl_total);
-                    produtoListss.setString("dt_finalizacao", date);
-                    produtoListss.setString("status", Utils.FECHADO);
+//                    confRealm.realm().beginTransaction();
+//                    vl_total = 0;
+//                    qtde_total = 0;
+//                    RealmResults<ProdutoRealm> produtoRealms = confRealm.realm()
+//                            .where(ProdutoRealm.class)
+//                            .equalTo("status", Utils.EM_PROCESSAMENTO)
+//                            .findAll();
+//                    for(int i = 0; i < produtoRealms.size(); i++){
+//                        vl_total += produtoRealms.get(i).getVl_total();
+//                    }
+//                    qtde_total += produtoRealms.size();
+//                    produtoRealms.setLong("id_lista", confRealm.ultimaListaProduto().getId());
+//                    produtoRealms.setString("status", Utils.FECHADO);
+//
+////                   confRealm.realm().copyToRealm(produtoRealms);
+//                    confRealm.realm().copyToRealmOrUpdate(produtoRealms);
+//                    confRealm.realm().commitTransaction();
+//                    confRealm.realm().close();
 
-//                    confRealm.realm().copyToRealm(produtoLists);
-                    confRealm.realm().copyToRealmOrUpdate(produtoListss);
-                    confRealm.realm().commitTransaction();
-                    confRealm.realm().close();
+//                    confRealm.realm().beginTransaction();
+//                    produtoList = new ProdutoList();
+//                    String date = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.getDefault()).format(new Date());
+//
+//                    RealmResults<ProdutoList> produtoListss = confRealm.realm()
+//                            .where(ProdutoList.class)
+//                            .equalTo("status", Utils.EM_PROCESSAMENTO)
+//                            .findAll();
+//                    produtoListss.setLong("qtde_itens", qtde_total);
+//                    produtoListss.setDouble    ("vl_total", vl_total);
+//                    produtoListss.setString("dt_finalizacao", date);
+//                    produtoListss.setString("status", Utils.FECHADO);
+//
+////                    confRealm.realm().copyToRealm(produtoLists);
+//                    confRealm.realm().copyToRealmOrUpdate(produtoListss);
+//                    confRealm.realm().commitTransaction();
+//                    confRealm.realm().close();
 
                     carregaFragment();
                     calculaDados();
+                }catch (Exception e){
+                    e.getMessage();
                 }
             }
         });

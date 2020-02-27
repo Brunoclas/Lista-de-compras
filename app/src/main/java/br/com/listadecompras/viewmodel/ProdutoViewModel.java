@@ -3,19 +3,12 @@ package br.com.listadecompras.viewmodel;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
-import android.content.Intent;
-import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
 
-import br.com.listadecompras.acitivities.MainActivity;
-import br.com.listadecompras.acitivities.ProdutoActivity;
-import br.com.listadecompras.model.Produto;
 import br.com.listadecompras.model.ProdutoRealm;
 import br.com.listadecompras.realm.ConfRealm;
 import br.com.listadecompras.utils.Utils;
 import br.com.listadecompras.webservices.UrlUtils;
-import io.realm.Realm;
 import io.realm.RealmResults;
 import io.realm.Sort;
 import retrofit2.Call;
@@ -26,6 +19,10 @@ public class ProdutoViewModel extends ViewModel {
     private MutableLiveData<RealmResults<ProdutoRealm>> produtos;
     private MutableLiveData<ProdutoRealm> produto;
     private ConfRealm confRealm;
+
+    private MutableLiveData<Double> vl_total;
+    private long qtde_total = 0;
+    private double vlTotal = 0;
 
     public LiveData<RealmResults<ProdutoRealm>> getListaProduto(){
         if(produtos == null){
@@ -77,5 +74,36 @@ public class ProdutoViewModel extends ViewModel {
         }
     }
 
+    public LiveData<Double> getFinalizaProd(){
+        if (vl_total == null) {
+            vl_total = new MutableLiveData<Double>();
+            finalizaListaCompras();
+        }
+        return vl_total;
+    }
 
+    private void finalizaListaCompras() {
+        confRealm = new ConfRealm();
+        if (confRealm.ultimaListaProduto().getStatus().equals(Utils.EM_PROCESSAMENTO)) {
+
+            confRealm.realm().beginTransaction();
+            qtde_total = 0;
+            RealmResults<ProdutoRealm> produtoRealms = confRealm.realm()
+                    .where(ProdutoRealm.class)
+                    .equalTo("status", Utils.EM_PROCESSAMENTO)
+                    .findAll();
+            for (int i = 0; i < produtoRealms.size(); i++) {
+                vl_total.setValue(vlTotal += produtoRealms.get(i).getVl_total());
+            }
+            qtde_total += produtoRealms.size();
+            produtoRealms.setLong("id_lista", confRealm.ultimaListaProduto().getId());
+            produtoRealms.setString("status", Utils.FECHADO);
+
+//          confRealm.realm().copyToRealm(produtoRealms);
+            confRealm.realm().copyToRealmOrUpdate(produtoRealms);
+            confRealm.realm().commitTransaction();
+            confRealm.realm().close();
+        }
+
+    }
 }
