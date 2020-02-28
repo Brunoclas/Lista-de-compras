@@ -2,16 +2,23 @@ package br.com.listadecompras.acitivities;
 
 import android.Manifest;
 import android.app.Activity;
-import android.arch.lifecycle.ViewModelProviders;
+
+import androidx.lifecycle.LifecycleRegistry;
+import androidx.lifecycle.ProcessLifecycleOwner;
+import androidx.lifecycle.ViewModelProviders;
+
 import android.content.Intent;
-import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.TextInputEditText;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.textfield.TextInputEditText;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
+
+import androidx.appcompat.widget.Toolbar;
+
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,13 +28,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-
 import br.com.listadecompras.R;
 import br.com.listadecompras.fragments.ListaProdutoFrgment;
-import br.com.listadecompras.model.Produto;
 import br.com.listadecompras.model.ProdutoList;
 import br.com.listadecompras.model.ProdutoRealm;
 import br.com.listadecompras.realm.ConfRealm;
@@ -36,13 +38,9 @@ import br.com.listadecompras.utils.Utils;
 import br.com.listadecompras.viewmodel.HistoricoViewModel;
 import br.com.listadecompras.viewmodel.ProdutoViewModel;
 import br.com.listadecompras.webservices.IService;
-import br.com.listadecompras.webservices.UrlUtils;
 import br.com.listadecompras.zxing.client.android.CaptureActivity;
 import br.com.listadecompras.zxing.client.android.PreferencesActivity;
 import io.realm.RealmResults;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -54,10 +52,11 @@ public class MainActivity extends AppCompatActivity {
     private ProdutoRealm produtoRealm;
     private TextView txtVlTotalLista, txtQtdeItem;
     private ConfRealm confRealm;
-    private String[] permissoes = new String []{
+    private String[] permissoes = new String[]{
             Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.INTERNET,
-            Manifest.permission.CAMERA
+            Manifest.permission.CAMERA,
+            Manifest.permission.VIBRATE
     };
     private ProdutoList produtoList;
     private Toolbar hometbr;
@@ -84,10 +83,10 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.historico:
-                    startActivity(new Intent(MainActivity.this, HistoricoActivity.class));
-                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                startActivity(new Intent(MainActivity.this, HistoricoActivity.class));
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 break;
             case R.id.menu_settings:
                 Intent intent = new Intent();
@@ -105,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
         menuInflater.inflate(R.menu.menu_home, menu);
 //       hometbr.inflateMenu(R.menu.menu_home);
 
-    return true;
+        return true;
     }
 
     private void carregaFragment() {
@@ -138,14 +137,17 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 try {
                     gtin = txtInpCodigo.getText().toString();
-                    ProdutoViewModel model = ViewModelProviders.of(MainActivity.this).get(ProdutoViewModel.class);
-                    model.getProduto(gtin).observe(MainActivity.this, produto -> {
-                        Bundle bundle = new Bundle();
-                                bundle.putParcelable("produto", produto);
-                                Intent i = new Intent(MainActivity.this, ProdutoActivity.class);
-                                i.putExtras(bundle);
-                                startActivityForResult(i, 2);
-                    });
+
+                    if(!gtin.equals("") && gtin.length() > 0 && !gtin.equals(null)) {
+
+                        ProdutoViewModel model = ViewModelProviders.of(MainActivity.this).get(ProdutoViewModel.class);
+                        model.getProduto(gtin).observeForever(produto -> {
+                            Bundle bundle = new Bundle();
+                            bundle.putParcelable("produto", produto);
+                            Intent i = new Intent(MainActivity.this, ProdutoActivity.class);
+                            i.putExtras(bundle);
+                            startActivityForResult(i, 2);
+                        });
 
 
 //                    Call<Produto> callProd = UrlUtils.getService().recuperaProd(gtin);
@@ -171,7 +173,10 @@ public class MainActivity extends AppCompatActivity {
 //                            Log.i("ResponseError", t.getMessage());
 //                        }
 //                    });
-                }catch (Exception e){
+                    }else{
+                        alerta("Campo de busca vazio !");
+                    }
+                } catch (Exception e) {
                     e.printStackTrace();
                     Log.i("ResponseError", e.getMessage());
                 }
@@ -182,17 +187,17 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                try{
+                try {
 
-                produtoList = new ProdutoList();
+                    produtoList = new ProdutoList();
 
-                ProdutoViewModel model = ViewModelProviders.of(MainActivity.this).get(ProdutoViewModel.class);
-                model.getFinalizaProd().observe(MainActivity.this, vl_total ->{
-                    vlTotal = vl_total;
-                });
+                    ProdutoViewModel model = ViewModelProviders.of(MainActivity.this).get(ProdutoViewModel.class);
+                    model.getFinalizaProd().observeForever( vl_total -> {
+                        vlTotal = vl_total;
+                    });
 
-                HistoricoViewModel model1 = ViewModelProviders.of(MainActivity.this).get(HistoricoViewModel.class);
-                model1.getSalvaLista(vlTotal);
+                    HistoricoViewModel model1 = ViewModelProviders.of(MainActivity.this).get(HistoricoViewModel.class);
+                    model1.getSalvaLista(vlTotal);
 
 //                final ConfRealm confRealm = new ConfRealm();
 
@@ -237,7 +242,7 @@ public class MainActivity extends AppCompatActivity {
 
                     carregaFragment();
                     calculaDados();
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.getMessage();
                 }
             }
@@ -248,7 +253,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK && requestCode == 1) {
             gtin = data.getStringExtra("dado");
@@ -279,27 +284,27 @@ public class MainActivity extends AppCompatActivity {
 //                        Log.i("ResponseError", t.getMessage());
 //                    }
 //                });
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
                 Log.i("ResponseError", e.getMessage());
             }
 
         }
-        if(resultCode == Activity.RESULT_OK && requestCode == 2){
+        if (resultCode == Activity.RESULT_OK && requestCode == 2) {
             try {
                 produtoRealm = data.getParcelableExtra("produtoRealm");
                 Log.i("Response", produtoRealm.toString());
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 
         }
     }
 
-    public void calculaDados(){
+    public void calculaDados() {
         try {
             vlTotal = 0;
-            if(!confRealm.ultimaListaProduto().getStatus().equals(Utils.FECHADO)) {
+            if (!confRealm.ultimaListaProduto().getStatus().equals(Utils.FECHADO)) {
 
                 RealmResults<ProdutoRealm> produtos = confRealm.realm().where(ProdutoRealm.class).equalTo("status", Utils.EM_PROCESSAMENTO).findAll();
                 if (produtos.size() > 0) {
@@ -309,11 +314,11 @@ public class MainActivity extends AppCompatActivity {
                     }
                     txtVlTotalLista.setText("Total: R$ " + String.format("%.2f", vlTotal));
                 }
-            }else {
+            } else {
                 txtVlTotalLista.setText("Total: R$ " + String.format("%.2f", 0.00));
                 txtQtdeItem.setText("Itens: " + 0);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -328,9 +333,10 @@ public class MainActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
 //        alerta("MainActivity - onResume");
-            carregaFragment();
-            calculaDados();
-            txtInpCodigo.setText("");
+        carregaFragment();
+        calculaDados();
+        txtInpCodigo.setText("");
+        gtin = "";
     }
 
     @Override
@@ -358,7 +364,7 @@ public class MainActivity extends AppCompatActivity {
         finish();
     }
 
-    private void alerta(String msg){
+    private void alerta(String msg) {
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 }
