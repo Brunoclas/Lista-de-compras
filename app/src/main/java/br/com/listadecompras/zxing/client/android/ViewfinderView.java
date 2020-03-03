@@ -27,7 +27,6 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -104,25 +103,29 @@ public final class ViewfinderView extends View {
         int metricaY;
         int metricaX;
 
-        if(width < 600 && height < 1000) {
-            metricaY = (int) (width * 0.45);
-            metricaX = (int) (height * 0.10);
-        }else{
-            metricaY = (int) (width * 0.20);
-            metricaX = (int) (height * 0.10);
+        if (width < 600 && height < 1000) {
+            metricaX = (int) (width * 0.17);
+            metricaY = (int) (height * 0.20);
+        } else {
+            metricaX = (int) (width * 0.17);
+            metricaY = (int) (height * 0.20);
         }
 
-
-
-        System.out.println("metricaY: " + metricaY);
         System.out.println("metrixaX: " + metricaX);
+        System.out.println("metricaY: " + metricaY);
 
-//      Draw the exterior (i.e. outside the framing rect) darkened
+        // Draw the exterior (i.e. outside the framing rect) darkened
+//        paint.setColor(resultBitmap != null ? resultColor : maskColor);
+//        canvas.drawRect(0, 0, width, frame.top, paint);
+//        canvas.drawRect(0, frame.top, frame.left, frame.bottom + 1, paint);
+//        canvas.drawRect(frame.right + 1, frame.top, width, frame.bottom + 1, paint);
+//        canvas.drawRect(0, frame.bottom + 1, width, height, paint);
+
         paint.setColor(resultBitmap != null ? resultColor : maskColor);
         canvas.drawRect(0, 0, width, frame.top + metricaY, paint);   // Top
         canvas.drawRect(0, frame.top + metricaY, frame.left - metricaX, frame.bottom - metricaY, paint);  //Right
         canvas.drawRect(frame.right + metricaX, frame.top + metricaY, width, frame.bottom - metricaY, paint);  // Left
-        canvas.drawRect(0, frame.bottom - metricaY, width, height , paint);  // Botton
+        canvas.drawRect(0, frame.bottom - metricaY, width, height, paint);  // Botton
 
         if (resultBitmap != null) {
             // Draw the opaque result bitmap over the scanning rectangle
@@ -159,6 +162,7 @@ public final class ViewfinderView extends View {
                     }
                 }
             }
+
             if (currentLast != null) {
                 paint.setAlpha(CURRENT_POINT_OPACITY / 2);
                 paint.setColor(resultPointColor);

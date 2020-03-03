@@ -24,7 +24,6 @@ public class HistoricoViewModel extends ViewModel {
     private long qtde_total;
 
     public void getSalvaLista(double vlTotal){
-
         salvaLista(vlTotal);
     }
 

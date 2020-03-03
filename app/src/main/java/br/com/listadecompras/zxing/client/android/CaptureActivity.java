@@ -497,6 +497,9 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 //    Bundle bundle = new Bundle();
 
         String dados = rawResult.getText();
+
+//        Toast.makeText(getApplicationContext(), "Codigo: " + dados, Toast.LENGTH_LONG).show();
+
         String formato = rawResult.getBarcodeFormat().toString();
         String tipo = resultHandler.getType().toString();
 

@@ -40,7 +40,7 @@
         <activity
             android:name=".zxing.client.android.CaptureActivity"
             android:clearTaskOnLaunch="true"
-            android:screenOrientation="sensorPortrait"
+            android:screenOrientation="sensorLandscape"
             android:stateNotNeeded="true"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateAlwaysHidden">
