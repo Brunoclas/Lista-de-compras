@@ -1,19 +1,14 @@
 package br.com.listadecompras.acitivities;
 
-import android.content.Intent;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import br.com.listadecompras.R;
 import br.com.listadecompras.adapters.ItensHistoricoAdapter;
-import br.com.listadecompras.adapters.ProdutoAdapter;
-import br.com.listadecompras.fragments.ListaProdutoFrgment;
 import br.com.listadecompras.model.ProdutoRealm;
 import br.com.listadecompras.realm.ConfRealm;
 import io.realm.RealmResults;

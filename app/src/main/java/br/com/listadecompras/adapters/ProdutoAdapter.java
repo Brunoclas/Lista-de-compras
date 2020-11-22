@@ -3,9 +3,9 @@ package br.com.listadecompras.adapters;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.recyclerview.widget.RecyclerView;
 import android.text.InputFilter;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,17 +13,13 @@ import android.view.ViewGroup;
 
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
-
 import br.com.listadecompras.R;
 import br.com.listadecompras.acitivities.MainActivity;
 import br.com.listadecompras.holders.ProdutoHolder;
-import br.com.listadecompras.model.Produto;
 import br.com.listadecompras.model.ProdutoRealm;
 import br.com.listadecompras.realm.ConfRealm;
 import br.com.listadecompras.utils.Utils;
 import io.realm.Realm;
-import io.realm.RealmMigration;
 import io.realm.RealmResults;
 import io.realm.Sort;
 

@@ -1,8 +1,8 @@
 package br.com.listadecompras.acitivities;
 
 import android.content.Intent;
-import android.support.design.widget.TextInputEditText;
-import android.support.v7.app.AppCompatActivity;
+import com.google.android.material.textfield.TextInputEditText;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -21,18 +21,11 @@ import java.util.Date;
 import java.util.Locale;
 
 import br.com.listadecompras.R;
-import br.com.listadecompras.model.Produto;
 import br.com.listadecompras.model.ProdutoList;
 import br.com.listadecompras.model.ProdutoRealm;
 import br.com.listadecompras.realm.ConfRealm;
 import br.com.listadecompras.utils.Utils;
-import br.com.listadecompras.zxing.Result;
-import io.realm.MutableRealmInteger;
-import io.realm.Realm;
-import io.realm.RealmList;
-import io.realm.RealmObject;
 import io.realm.RealmResults;
-import okhttp3.internal.Util;
 
 public class ProdutoActivity extends AppCompatActivity {
 

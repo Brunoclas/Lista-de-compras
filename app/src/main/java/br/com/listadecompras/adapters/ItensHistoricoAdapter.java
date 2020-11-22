@@ -1,7 +1,7 @@
 package br.com.listadecompras.adapters;
 
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import android.text.InputFilter;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +12,6 @@ import com.squareup.picasso.Picasso;
 import br.com.listadecompras.R;
 import br.com.listadecompras.holders.ItensHistoricoHolder;
 import br.com.listadecompras.model.ProdutoRealm;
-import br.com.listadecompras.realm.ConfRealm;
 import io.realm.RealmResults;
 
 public class ItensHistoricoAdapter extends RecyclerView.Adapter<ItensHistoricoHolder> {

@@ -1,32 +1,29 @@
 package br.com.listadecompras.fragments;
 
-import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProvider;
-import android.arch.lifecycle.ViewModelProviders;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.Log;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
 import br.com.listadecompras.R;
-import br.com.listadecompras.adapters.HistoricoAdapter;
 import br.com.listadecompras.adapters.ProdutoAdapter;
 import br.com.listadecompras.model.ProdutoRealm;
 import br.com.listadecompras.realm.ConfRealm;
 import br.com.listadecompras.utils.Utils;
 import br.com.listadecompras.viewmodel.ProdutoViewModel;
 import io.realm.RealmResults;
-import io.realm.Sort;
-import okhttp3.internal.Util;
 
 
 public class ListaProdutoFrgment extends Fragment implements ProdutoAdapter.OnClickProdListener {
