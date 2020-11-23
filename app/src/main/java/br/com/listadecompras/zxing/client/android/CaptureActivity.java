@@ -16,9 +16,7 @@
 
 package br.com.listadecompras.zxing.client.android;
 
-import br.com.listadecompras.acitivities.MainActivity;
-import br.com.listadecompras.acitivities.ProdutoActivity;
-import br.com.listadecompras.model.Produto;
+import br.com.listadecompras.ui.acitivities.produto.ProdutoActivity;
 import br.com.listadecompras.model.ProdutoRealm;
 import br.com.listadecompras.webservices.UrlUtils;
 import br.com.listadecompras.zxing.BarcodeFormat;
@@ -44,7 +42,6 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.net.Uri;

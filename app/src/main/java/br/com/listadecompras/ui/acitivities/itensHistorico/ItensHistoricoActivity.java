@@ -1,4 +1,4 @@
-package br.com.listadecompras.acitivities;
+package br.com.listadecompras.ui.acitivities.itensHistorico;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;

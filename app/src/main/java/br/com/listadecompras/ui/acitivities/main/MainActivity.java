@@ -1,10 +1,8 @@
-package br.com.listadecompras.acitivities;
+package br.com.listadecompras.ui.acitivities.main;
 
 import android.Manifest;
 import android.app.Activity;
 
-import androidx.lifecycle.LifecycleRegistry;
-import androidx.lifecycle.ProcessLifecycleOwner;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.content.Intent;
@@ -29,7 +27,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import br.com.listadecompras.R;
-import br.com.listadecompras.fragments.ListaProdutoFrgment;
+import br.com.listadecompras.ui.acitivities.produto.ProdutoActivity;
+import br.com.listadecompras.ui.acitivities.historico.HistoricoActivity;
+import br.com.listadecompras.ui.fragments.ListaProdutoFrgment;
 import br.com.listadecompras.model.ProdutoList;
 import br.com.listadecompras.model.ProdutoRealm;
 import br.com.listadecompras.realm.ConfRealm;
@@ -42,7 +42,7 @@ import br.com.listadecompras.zxing.client.android.CaptureActivity;
 import br.com.listadecompras.zxing.client.android.PreferencesActivity;
 import io.realm.RealmResults;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MainC.View {
 
     private FloatingActionButton btnLerCodigo;
     private TextInputEditText txtInpCodigo;
@@ -63,6 +63,8 @@ public class MainActivity extends AppCompatActivity {
     private double vl_total = 0;
     private long qtde_total = 0;
     private double vlTotal = 0;
+    private MainP mainP;
+    private RealmResults<ProdutoRealm> produtos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Permissions.validatePermission(permissoes, this, 1);
         inicializaComponentes();
+        mainP = new MainP(this);
         carregaToobar();
 //        carregaFragment();
         confRealm = new ConfRealm();
@@ -118,7 +121,6 @@ public class MainActivity extends AppCompatActivity {
         ft.replace(frag, fragment);
         ft.addToBackStack(null);
         ft.commit();
-
     }
 
     private void inicializaComponentes() {
@@ -306,7 +308,7 @@ public class MainActivity extends AppCompatActivity {
             vlTotal = 0;
             if (!confRealm.ultimaListaProduto().getStatus().equals(Utils.FECHADO)) {
 
-                RealmResults<ProdutoRealm> produtos = confRealm.realm().where(ProdutoRealm.class).equalTo("status", Utils.EM_PROCESSAMENTO).findAll();
+//                RealmResults<ProdutoRealm> produtos = confRealm.realm().where(ProdutoRealm.class).equalTo("status", Utils.EM_PROCESSAMENTO).findAll();
                 if (produtos.size() > 0) {
                     txtQtdeItem.setText("Itens: " + produtos.size());
                     for (int i = 0; i < produtos.size(); i++) {
@@ -324,12 +326,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-//        alerta("MainActivity - onStart");
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
 //        alerta("MainActivity - onResume");
@@ -337,24 +333,6 @@ public class MainActivity extends AppCompatActivity {
         calculaDados();
         txtInpCodigo.setText("");
         gtin = "";
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-//        alerta("MainActivity - onPause");
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-//        alerta("MainActivity - onStop");
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-//        alerta("MainActivity - onDestroy");
     }
 
     @Override
@@ -366,5 +344,11 @@ public class MainActivity extends AppCompatActivity {
 
     private void alerta(String msg) {
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+    }
+
+
+    @Override
+    public void loadProducts(RealmResults<ProdutoRealm> produtos) {
+        this.produtos = produtos;
     }
 }

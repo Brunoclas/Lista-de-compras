@@ -1,4 +1,4 @@
-package br.com.listadecompras.acitivities;
+package br.com.listadecompras.ui.acitivities.produto;
 
 import android.content.Intent;
 import com.google.android.material.textfield.TextInputEditText;
@@ -86,13 +86,9 @@ public class ProdutoActivity extends AppCompatActivity {
     private void salvaDadosRealm(final ProdutoRealm produto) {
         try {
             RealmResults<ProdutoRealm> produtoRealms = confRealm.realm().where(ProdutoRealm.class).findAll();
-
             if(produtoRealms.size() >= 0) {
-
 //                produtoRealm1 = confRealm.realm().where(ProdutoRealm.class).equalTo("gtin", produto.getGtin()).findFirst();
-//
 //                if (produtoRealm1 == null) {
-
                 ProdutoRealm produtoRealm = new ProdutoRealm();
                 confRealm.realm().beginTransaction();
                 if(produtoRealms.size() <= 0) {

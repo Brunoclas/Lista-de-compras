@@ -1,7 +1,5 @@
-package br.com.listadecompras.fragments;
+package br.com.listadecompras.ui.fragments;
 
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
@@ -92,34 +90,10 @@ public class ListaProdutoFrgment extends Fragment implements ProdutoAdapter.OnCl
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-//        alerta("ListaProdutoFrgment - onStart");
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
 //        alerta("ListaProdutoFrgment - onResume");
             preencheLista();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-//        alerta("ListaProdutoFrgment - onPause");
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-//        alerta("ListaProdutoFrgment - onStop");
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-//        alerta("ListaProdutoFrgment - onDestroy");
     }
 
     private void alerta(String msg){

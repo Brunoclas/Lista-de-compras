@@ -1,4 +1,4 @@
-package br.com.listadecompras.acitivities;
+package br.com.listadecompras.ui.acitivities.historico;
 
 import android.content.Intent;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,6 +13,7 @@ import br.com.listadecompras.R;
 import br.com.listadecompras.adapters.HistoricoAdapter;
 import br.com.listadecompras.model.ProdutoList;
 import br.com.listadecompras.realm.ConfRealm;
+import br.com.listadecompras.ui.acitivities.itensHistorico.ItensHistoricoActivity;
 import br.com.listadecompras.utils.Utils;
 import io.realm.RealmResults;
 import io.realm.Sort;
