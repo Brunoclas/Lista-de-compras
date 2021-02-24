@@ -18,8 +18,11 @@ package br.com.listadecompras.zxing.client.android;
 
 import br.com.listadecompras.acitivities.MainActivity;
 import br.com.listadecompras.acitivities.ProdutoActivity;
+import br.com.listadecompras.model.Barcode_Request;
 import br.com.listadecompras.model.Produto;
 import br.com.listadecompras.model.ProdutoRealm;
+import br.com.listadecompras.model.Produto_k;
+import br.com.listadecompras.model.Produto_k_root;
 import br.com.listadecompras.webservices.UrlUtils;
 import br.com.listadecompras.zxing.BarcodeFormat;
 import br.com.listadecompras.zxing.DecodeHintType;
@@ -506,13 +509,17 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         DateFormat formatter = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
         String dataLeitura = formatter.format(rawResult.getTimestamp());
 
+        Barcode_Request barR = new Barcode_Request();
+        barR.setPassport("400000000");
+        barR.setBarcode(dados);
+
         try {
-            Call<ProdutoRealm> callProd = UrlUtils.getService().recuperaProd(dados);
-            callProd.enqueue(new Callback<ProdutoRealm>() {
+            Call<Produto_k_root> callProd = UrlUtils.getService().recuperaProd(barR);
+            callProd.enqueue(new Callback<Produto_k_root>() {
                 @Override
-                public void onResponse(Call<ProdutoRealm> call, Response<ProdutoRealm> response) {
+                public void onResponse(Call<Produto_k_root> call, Response<Produto_k_root> response) {
                     if (response.isSuccessful()) {
-                        ProdutoRealm produto = response.body();
+                        Produto_k_root produto = response.body();
                         Log.i("Response", produto.toString());
                         Bundle bundle = new Bundle();
                         bundle.putParcelable("produto", produto);
@@ -525,7 +532,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
                 }
 
                 @Override
-                public void onFailure(Call<ProdutoRealm> call, Throwable t) {
+                public void onFailure(Call<Produto_k_root> call, Throwable t) {
                     t.getStackTrace();
                     Log.i("ResponseError", t.getMessage());
                 }

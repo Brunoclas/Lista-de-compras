@@ -48,26 +48,26 @@ public class ProdutoViewModel extends ViewModel {
 
     private void loadProduto(String gtin){
         try {
-            Call<ProdutoRealm> callProd = UrlUtils.getService().recuperaProd(gtin);
-            callProd.enqueue(new Callback<ProdutoRealm>() {
-                @Override
-                public void onResponse(Call<ProdutoRealm> call, Response<ProdutoRealm> response) {
-                    if (response.isSuccessful()) {
-                        ProdutoRealm prod = response.body();
-                        Log.i("Response", produto.toString());
-                        produto.setValue(prod);
-
-                    }else{
-//                        Toast.makeText(MainActivity.this, "Produto nāo encontrado", Toast.LENGTH_LONG).show();
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<ProdutoRealm> call, Throwable t) {
-                    t.getStackTrace();
-                    Log.i("ResponseError", t.getMessage());
-                }
-            });
+//            Call<ProdutoRealm> callProd = UrlUtils.getService().recuperaProd(gtin);
+//            callProd.enqueue(new Callback<ProdutoRealm>() {
+//                @Override
+//                public void onResponse(Call<ProdutoRealm> call, Response<ProdutoRealm> response) {
+//                    if (response.isSuccessful()) {
+//                        ProdutoRealm prod = response.body();
+//                        Log.i("Response", produto.toString());
+//                        produto.setValue(prod);
+//
+//                    }else{
+////                        Toast.makeText(MainActivity.this, "Produto nāo encontrado", Toast.LENGTH_LONG).show();
+//                    }
+//                }
+//
+//                @Override
+//                public void onFailure(Call<ProdutoRealm> call, Throwable t) {
+//                    t.getStackTrace();
+//                    Log.i("ResponseError", t.getMessage());
+//                }
+//            });
         }catch (Exception e){
             e.printStackTrace();
             Log.i("ResponseError", e.getMessage());

@@ -28,8 +28,14 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.HashMap;
+
 import br.com.listadecompras.R;
 import br.com.listadecompras.fragments.ListaProdutoFrgment;
+import br.com.listadecompras.model.Barcode_Request;
 import br.com.listadecompras.model.ProdutoList;
 import br.com.listadecompras.model.ProdutoRealm;
 import br.com.listadecompras.realm.ConfRealm;
@@ -38,9 +44,14 @@ import br.com.listadecompras.utils.Utils;
 import br.com.listadecompras.viewmodel.HistoricoViewModel;
 import br.com.listadecompras.viewmodel.ProdutoViewModel;
 import br.com.listadecompras.webservices.IService;
+import br.com.listadecompras.webservices.UrlUtils;
 import br.com.listadecompras.zxing.client.android.CaptureActivity;
 import br.com.listadecompras.zxing.client.android.PreferencesActivity;
 import io.realm.RealmResults;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -141,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
                     if(!gtin.equals("") && gtin.length() > 0 && !gtin.equals(null)) {
 
                         ProdutoViewModel model = ViewModelProviders.of(MainActivity.this).get(ProdutoViewModel.class);
-                        model.getProduto(gtin).observeForever(produto -> {
+                            model.getProduto(gtin).observeForever(produto -> {
                             Bundle bundle = new Bundle();
                             bundle.putParcelable("produto", produto);
                             Intent i = new Intent(MainActivity.this, ProdutoActivity.class);
@@ -149,6 +160,35 @@ public class MainActivity extends AppCompatActivity {
                             startActivityForResult(i, 2);
                         });
 
+                        Barcode_Request barR = new Barcode_Request();
+                        barR.setPassport("400000000");
+                        barR.setBarcode(gtin);
+
+                        System.out.println(barR.toString());
+
+//                        Call<ResponseBody> callProd = UrlUtils.getService().recuperaProd(barR);
+//                        callProd.enqueue(new Callback<ResponseBody>() {
+//                            @Override
+//                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+//                                if(response.isSuccessful()){
+//                                    String res = null;
+//                                    try {
+//                                        res = response.body().string();
+//                                    } catch (IOException e) {
+//                                        e.printStackTrace();
+//                                    }
+//                                    System.out.println(res);
+//                                    Toast.makeText(MainActivity.this, response.code(), Toast.LENGTH_LONG).show();
+//                                }else{
+//                                    Toast.makeText(MainActivity.this, "Produto nāo encontrado", Toast.LENGTH_LONG).show();
+//                                }
+//                            }
+//                            @Override
+//                            public void onFailure(Call<ResponseBody> call, Throwable t) {
+//                                t.getStackTrace();
+//                                Log.i("ResponseError", t.getMessage());
+//                            }
+//                        });
 
 //                    Call<Produto> callProd = UrlUtils.getService().recuperaProd(gtin);
 //                    callProd.enqueue(new Callback<Produto>() {
@@ -173,6 +213,7 @@ public class MainActivity extends AppCompatActivity {
 //                            Log.i("ResponseError", t.getMessage());
 //                        }
 //                    });
+
                     }else{
                         alerta("Campo de busca vazio !");
                     }
@@ -258,28 +299,36 @@ public class MainActivity extends AppCompatActivity {
         if (resultCode == Activity.RESULT_OK && requestCode == 1) {
             gtin = data.getStringExtra("dado");
             txtInpCodigo.setText(gtin);
-            Log.i("Response", gtin);
+            Log.i("Response-gtin", gtin);
 
             try {
-//                Call<Produto> callProd = UrlUtils.getService().recuperaProd(gtin);
-//                callProd.enqueue(new Callback<Produto>() {
+                Barcode_Request barR = new Barcode_Request();
+                barR.setPassport("400000000");
+                barR.setBarcode(gtin);
+
+                System.out.println(barR.toString());
+
+//                Call<ResponseBody> callProd = UrlUtils.getService().recuperaProd(barR);
+//                callProd.enqueue(new Callback<ResponseBody>() {
 //                    @Override
-//                    public void onResponse(Call<Produto> call, Response<Produto> response) {
-//                        if (response.isSuccessful()) {
-//                            Produto produto = response.body();
-//                            Log.i("Response", produto.toString());
-//                            Bundle bundle = new Bundle();
-//                            bundle.putParcelable("produto", produto);
-//                            Intent i = new Intent(MainActivity.this, ProdutoActivity.class);
-//                            i.putExtras(bundle);
-//                            startActivity(i);
+//                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+//                        if(response.isSuccessful()){
+//                            Log.i("Response", "entrou na chamada");
+//                            String res = null;
+//                            try {
+//                                res = response.body().string();
+//                                Log.i("Response-request", res);
+//                            } catch (IOException e) {
+//                                e.printStackTrace();
+//                            }
+//                            System.out.println(res);
+//                            Toast.makeText(MainActivity.this, response.code(), Toast.LENGTH_LONG).show();
 //                        }else{
 //                            Toast.makeText(MainActivity.this, "Produto nāo encontrado", Toast.LENGTH_LONG).show();
 //                        }
 //                    }
-//
 //                    @Override
-//                    public void onFailure(Call<Produto> call, Throwable t) {
+//                    public void onFailure(Call<ResponseBody> call, Throwable t) {
 //                        t.getStackTrace();
 //                        Log.i("ResponseError", t.getMessage());
 //                    }
