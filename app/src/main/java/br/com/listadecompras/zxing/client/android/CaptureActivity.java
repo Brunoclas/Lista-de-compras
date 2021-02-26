@@ -16,13 +16,6 @@
 
 package br.com.listadecompras.zxing.client.android;
 
-import br.com.listadecompras.acitivities.MainActivity;
-import br.com.listadecompras.acitivities.ProdutoActivity;
-import br.com.listadecompras.model.Barcode_Request;
-import br.com.listadecompras.model.Produto;
-import br.com.listadecompras.model.ProdutoRealm;
-import br.com.listadecompras.model.Produto_k;
-import br.com.listadecompras.model.Produto_k_root;
 import br.com.listadecompras.webservices.UrlUtils;
 import br.com.listadecompras.zxing.BarcodeFormat;
 import br.com.listadecompras.zxing.DecodeHintType;
@@ -47,7 +40,6 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.net.Uri;
@@ -79,6 +71,7 @@ import java.util.EnumSet;
 import java.util.Map;
 
 import br.com.listadecompras.R;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -509,30 +502,26 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         DateFormat formatter = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
         String dataLeitura = formatter.format(rawResult.getTimestamp());
 
-        Barcode_Request barR = new Barcode_Request();
-        barR.setPassport("400000000");
-        barR.setBarcode(dados);
-
         try {
-            Call<Produto_k_root> callProd = UrlUtils.getService().recuperaProd(barR);
-            callProd.enqueue(new Callback<Produto_k_root>() {
+            Call<ResponseBody> callProd = UrlUtils.getService().recuperaProd(dados);
+            callProd.enqueue(new Callback<ResponseBody>() {
                 @Override
-                public void onResponse(Call<Produto_k_root> call, Response<Produto_k_root> response) {
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                     if (response.isSuccessful()) {
-                        Produto_k_root produto = response.body();
-                        Log.i("Response", produto.toString());
-                        Bundle bundle = new Bundle();
-                        bundle.putParcelable("produto", produto);
-                        Intent i = new Intent(CaptureActivity.this, ProdutoActivity.class);
-                        i.putExtras(bundle);
-                        startActivity(i);
+                        ResponseBody responseBody = response.body();
+                        Log.i("Response", responseBody.toString());
+//                        Bundle bundle = new Bundle();
+//                        bundle.putParcelable("produto", res);
+//                        Intent i = new Intent(CaptureActivity.this, ProdutoActivity.class);
+//                        i.putExtras(bundle);
+//                        startActivity(i);
                     } else {
                         Toast.makeText(CaptureActivity.this, "Produto nāo encontrado", Toast.LENGTH_LONG).show();
                     }
                 }
 
                 @Override
-                public void onFailure(Call<Produto_k_root> call, Throwable t) {
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
                     t.getStackTrace();
                     Log.i("ResponseError", t.getMessage());
                 }
@@ -549,7 +538,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 //
 //    intent.putExtras(bundle);
 //    startActivity(intent);
-        finish();
+//        finish();
     }
 
     /**

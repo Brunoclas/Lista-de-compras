@@ -3,11 +3,10 @@ package br.com.listadecompras.acitivities;
 import android.Manifest;
 import android.app.Activity;
 
-import androidx.lifecycle.LifecycleRegistry;
-import androidx.lifecycle.ProcessLifecycleOwner;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.content.Intent;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -15,6 +14,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
 import androidx.appcompat.widget.Toolbar;
@@ -28,14 +29,15 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.json.JSONObject;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
 
 import java.io.IOException;
-import java.util.HashMap;
 
 import br.com.listadecompras.R;
 import br.com.listadecompras.fragments.ListaProdutoFrgment;
-import br.com.listadecompras.model.Barcode_Request;
+import br.com.listadecompras.model.FormatDescriProd;
 import br.com.listadecompras.model.ProdutoList;
 import br.com.listadecompras.model.ProdutoRealm;
 import br.com.listadecompras.realm.ConfRealm;
@@ -49,6 +51,7 @@ import br.com.listadecompras.zxing.client.android.CaptureActivity;
 import br.com.listadecompras.zxing.client.android.PreferencesActivity;
 import io.realm.RealmResults;
 import okhttp3.ResponseBody;
+import pl.droidsonroids.jspoon.annotation.Selector;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -74,6 +77,11 @@ public class MainActivity extends AppCompatActivity {
     private double vl_total = 0;
     private long qtde_total = 0;
     private double vlTotal = 0;
+
+    @Selector("#body")
+    public String title;
+    @Selector("#body")
+    public String cod_barras;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,10 +157,10 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     gtin = txtInpCodigo.getText().toString();
 
-                    if(!gtin.equals("") && gtin.length() > 0 && !gtin.equals(null)) {
+                    if (!gtin.equals("") && gtin.length() > 0 && !gtin.equals(null)) {
 
                         ProdutoViewModel model = ViewModelProviders.of(MainActivity.this).get(ProdutoViewModel.class);
-                            model.getProduto(gtin).observeForever(produto -> {
+                        model.getProduto(gtin).observeForever(produto -> {
                             Bundle bundle = new Bundle();
                             bundle.putParcelable("produto", produto);
                             Intent i = new Intent(MainActivity.this, ProdutoActivity.class);
@@ -160,35 +168,63 @@ public class MainActivity extends AppCompatActivity {
                             startActivityForResult(i, 2);
                         });
 
-                        Barcode_Request barR = new Barcode_Request();
-                        barR.setPassport("400000000");
-                        barR.setBarcode(gtin);
+                        System.out.println(gtin);
 
-                        System.out.println(barR.toString());
-
-//                        Call<ResponseBody> callProd = UrlUtils.getService().recuperaProd(barR);
-//                        callProd.enqueue(new Callback<ResponseBody>() {
-//                            @Override
-//                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-//                                if(response.isSuccessful()){
-//                                    String res = null;
-//                                    try {
-//                                        res = response.body().string();
-//                                    } catch (IOException e) {
-//                                        e.printStackTrace();
-//                                    }
+                        Call<ResponseBody> callProd = UrlUtils.getService().recuperaProd(gtin);
+                        callProd.enqueue(new Callback<ResponseBody>() {
+                            @Override
+                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                if (response.isSuccessful()) {
+                                    String res = null;
+                                    try {
+                                        res = response.body().string();
+//                                        Document document = Jsoup.parse(res);
+//                                        Elements element = document.getElementsByAttributeValue("id", "product_description");
+//                                        title = element.html();
+//                                        String[] titleFormated = title.split(" ");
+//                                        element = new Elements();
+//                                        element = document.getElementsByAttributeValue("id", "product_gtin");
+//                                        cod_barras = element.html();
+//                                        FormatDescriProd formatDescriProd = new FormatDescriProd();
+//                                        for (int x = 0; x < titleFormated.length; x++) {
+////                                            System.out.println(titleFormated[x] + " - " + cod_barras);
+//                                            if (x == 0 && titleFormated[0].length() > 2) {
+//                                                formatDescriProd.setWord0(titleFormated[x].substring(0, 3));
+//                                            }
+//                                            if (x == 1 && titleFormated[0].length() > 2) {
+//                                                formatDescriProd.setWord1(titleFormated[x].substring(0, 3));
+//                                            }
+//                                            if (x == 2 && titleFormated[0].length() > 2) {
+//                                                formatDescriProd.setWord2(titleFormated[x].substring(0, 3));
+//                                            }
+//                                            if (x == 3 && titleFormated[0].length() > 2) {
+//                                                formatDescriProd.setWord3(titleFormated[x].substring(0, 3));
+//                                            }
+//                                            if (x == 4 && titleFormated[0].length() > 2) {
+//                                                formatDescriProd.setWord4(titleFormated[x].substring(0, 3));
+//                                            }
+//                                            if (x == 5 && titleFormated[0].length() > 2) {
+//                                                formatDescriProd.setWord5(titleFormated[x].substring(0, 3));
+//                                            }
+//                                        }
+//                                        System.out.println(formatDescriProd.toString());
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
 //                                    System.out.println(res);
 //                                    Toast.makeText(MainActivity.this, response.code(), Toast.LENGTH_LONG).show();
-//                                }else{
-//                                    Toast.makeText(MainActivity.this, "Produto nāo encontrado", Toast.LENGTH_LONG).show();
-//                                }
-//                            }
-//                            @Override
-//                            public void onFailure(Call<ResponseBody> call, Throwable t) {
-//                                t.getStackTrace();
-//                                Log.i("ResponseError", t.getMessage());
-//                            }
-//                        });
+                                } else {
+                                    Toast.makeText(MainActivity.this, "Produto nāo encontrado", Toast.LENGTH_LONG).show();
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                t.getStackTrace();
+                                Log.i("ResponseError", t.getMessage());
+                            }
+                        });
+
 
 //                    Call<Produto> callProd = UrlUtils.getService().recuperaProd(gtin);
 //                    callProd.enqueue(new Callback<Produto>() {
@@ -214,7 +250,7 @@ public class MainActivity extends AppCompatActivity {
 //                        }
 //                    });
 
-                    }else{
+                    } else {
                         alerta("Campo de busca vazio !");
                     }
                 } catch (Exception e) {
@@ -233,7 +269,7 @@ public class MainActivity extends AppCompatActivity {
                     produtoList = new ProdutoList();
 
                     ProdutoViewModel model = ViewModelProviders.of(MainActivity.this).get(ProdutoViewModel.class);
-                    model.getFinalizaProd().observeForever( vl_total -> {
+                    model.getFinalizaProd().observeForever(vl_total -> {
                         vlTotal = vl_total;
                     });
 
@@ -302,11 +338,6 @@ public class MainActivity extends AppCompatActivity {
             Log.i("Response-gtin", gtin);
 
             try {
-                Barcode_Request barR = new Barcode_Request();
-                barR.setPassport("400000000");
-                barR.setBarcode(gtin);
-
-                System.out.println(barR.toString());
 
 //                Call<ResponseBody> callProd = UrlUtils.getService().recuperaProd(barR);
 //                callProd.enqueue(new Callback<ResponseBody>() {
