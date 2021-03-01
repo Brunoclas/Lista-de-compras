@@ -16,7 +16,6 @@
 
 package br.com.listadecompras.zxing.client.android;
 
-import br.com.listadecompras.acitivities.MainActivity;
 import br.com.listadecompras.acitivities.ProdutoActivity;
 import br.com.listadecompras.model.Produto;
 import br.com.listadecompras.model.ProdutoRealm;
@@ -44,7 +43,6 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.net.Uri;
@@ -76,6 +74,7 @@ import java.util.EnumSet;
 import java.util.Map;
 
 import br.com.listadecompras.R;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -513,7 +512,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
                 public void onResponse(Call<ProdutoRealm> call, Response<ProdutoRealm> response) {
                     if (response.isSuccessful()) {
                         ProdutoRealm produto = response.body();
-                        Log.i("Response", produto.toString());
+                        Log.i("Response",produto.toString());
                         Bundle bundle = new Bundle();
                         bundle.putParcelable("produto", produto);
                         Intent i = new Intent(CaptureActivity.this, ProdutoActivity.class);
