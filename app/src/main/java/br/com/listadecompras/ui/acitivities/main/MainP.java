@@ -17,4 +17,9 @@ public class MainP implements MainC.Presenter {
     public void callBarcodeReader() {
         view.callBarcodeReader();
     }
+
+    @Override
+    public void loadBar() {
+        view.loadBar();
+    }
 }

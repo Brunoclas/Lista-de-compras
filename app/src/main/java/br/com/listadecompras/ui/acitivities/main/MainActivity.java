@@ -78,15 +78,10 @@ public class MainActivity extends AppCompatActivity implements MainC.View{
         Permissions.validatePermission(permissoes, this, 1);
         mainP = new MainP(this);
         inicializaComponentes();
-        carregaToobar();
+        mainP.loadBar();
 //        carregaFragment();
         confRealm = new ConfRealm();
 //        confRealm.deleteRealm();
-    }
-
-    private void carregaToobar() {
-        hometbr.setTitle("Lista de Compras");
-        setSupportActionBar(hometbr);
     }
 
     @Override
@@ -384,5 +379,11 @@ public class MainActivity extends AppCompatActivity implements MainC.View{
     @Override
     public void callBarcodeReader() {
         startActivityForResult(new Intent(MainActivity.this, CaptureActivity.class), 1);
+    }
+
+    @Override
+    public void loadBar() {
+        hometbr.setTitle("Lista de Compras");
+        setSupportActionBar(hometbr);
     }
 }
