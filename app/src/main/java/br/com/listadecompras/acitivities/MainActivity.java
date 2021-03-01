@@ -14,8 +14,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
 import androidx.appcompat.widget.Toolbar;
@@ -29,15 +27,11 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
-
 import java.io.IOException;
 
 import br.com.listadecompras.R;
 import br.com.listadecompras.fragments.ListaProdutoFrgment;
-import br.com.listadecompras.model.FormatDescriProd;
+import br.com.listadecompras.model.Produto;
 import br.com.listadecompras.model.ProdutoList;
 import br.com.listadecompras.model.ProdutoRealm;
 import br.com.listadecompras.realm.ConfRealm;
@@ -170,85 +164,29 @@ public class MainActivity extends AppCompatActivity {
 
                         System.out.println(gtin);
 
-                        Call<ResponseBody> callProd = UrlUtils.getService().recuperaProd(gtin);
-                        callProd.enqueue(new Callback<ResponseBody>() {
-                            @Override
-                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                if (response.isSuccessful()) {
-                                    String res = null;
-                                    try {
-                                        res = response.body().string();
-//                                        Document document = Jsoup.parse(res);
-//                                        Elements element = document.getElementsByAttributeValue("id", "product_description");
-//                                        title = element.html();
-//                                        String[] titleFormated = title.split(" ");
-//                                        element = new Elements();
-//                                        element = document.getElementsByAttributeValue("id", "product_gtin");
-//                                        cod_barras = element.html();
-//                                        FormatDescriProd formatDescriProd = new FormatDescriProd();
-//                                        for (int x = 0; x < titleFormated.length; x++) {
-////                                            System.out.println(titleFormated[x] + " - " + cod_barras);
-//                                            if (x == 0 && titleFormated[0].length() > 2) {
-//                                                formatDescriProd.setWord0(titleFormated[x].substring(0, 3));
-//                                            }
-//                                            if (x == 1 && titleFormated[0].length() > 2) {
-//                                                formatDescriProd.setWord1(titleFormated[x].substring(0, 3));
-//                                            }
-//                                            if (x == 2 && titleFormated[0].length() > 2) {
-//                                                formatDescriProd.setWord2(titleFormated[x].substring(0, 3));
-//                                            }
-//                                            if (x == 3 && titleFormated[0].length() > 2) {
-//                                                formatDescriProd.setWord3(titleFormated[x].substring(0, 3));
-//                                            }
-//                                            if (x == 4 && titleFormated[0].length() > 2) {
-//                                                formatDescriProd.setWord4(titleFormated[x].substring(0, 3));
-//                                            }
-//                                            if (x == 5 && titleFormated[0].length() > 2) {
-//                                                formatDescriProd.setWord5(titleFormated[x].substring(0, 3));
-//                                            }
-//                                        }
-//                                        System.out.println(formatDescriProd.toString());
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
-                                    }
-//                                    System.out.println(res);
-//                                    Toast.makeText(MainActivity.this, response.code(), Toast.LENGTH_LONG).show();
-                                } else {
-                                    Toast.makeText(MainActivity.this, "Produto nāo encontrado", Toast.LENGTH_LONG).show();
-                                }
+                    Call<ProdutoRealm> callProd = UrlUtils.getService().recuperaProd(gtin);
+                    callProd.enqueue(new Callback<ProdutoRealm>() {
+                        @Override
+                        public void onResponse(Call<ProdutoRealm> call, Response<ProdutoRealm> response) {
+                            if (response.isSuccessful()) {
+                                ProdutoRealm produto = response.body();
+                                Log.i("Response", produto.toString());
+                                Bundle bundle = new Bundle();
+                                bundle.putParcelable("produto", produto);
+                                Intent i = new Intent(MainActivity.this, ProdutoActivity.class);
+                                i.putExtras(bundle);
+                                startActivityForResult(i, 2);
+                            }else{
+                                Toast.makeText(MainActivity.this, "Produto nāo encontrado", Toast.LENGTH_LONG).show();
                             }
+                        }
 
-                            @Override
-                            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                t.getStackTrace();
-                                Log.i("ResponseError", t.getMessage());
-                            }
-                        });
-
-
-//                    Call<Produto> callProd = UrlUtils.getService().recuperaProd(gtin);
-//                    callProd.enqueue(new Callback<Produto>() {
-//                        @Override
-//                        public void onResponse(Call<Produto> call, Response<Produto> response) {
-//                            if (response.isSuccessful()) {
-//                                Produto produto = response.body();
-//                                Log.i("Response", produto.toString());
-//                                Bundle bundle = new Bundle();
-//                                bundle.putParcelable("produto", produto);
-//                                Intent i = new Intent(MainActivity.this, ProdutoActivity.class);
-//                                i.putExtras(bundle);
-//                                startActivityForResult(i, 2);
-//                            }else{
-//                                Toast.makeText(MainActivity.this, "Produto nāo encontrado", Toast.LENGTH_LONG).show();
-//                            }
-//                        }
-//
-//                        @Override
-//                        public void onFailure(Call<Produto> call, Throwable t) {
-//                            t.getStackTrace();
-//                            Log.i("ResponseError", t.getMessage());
-//                        }
-//                    });
+                        @Override
+                        public void onFailure(Call<ProdutoRealm> call, Throwable t) {
+                            t.getStackTrace();
+                            Log.i("ResponseError", t.getMessage());
+                        }
+                    });
 
                     } else {
                         alerta("Campo de busca vazio !");

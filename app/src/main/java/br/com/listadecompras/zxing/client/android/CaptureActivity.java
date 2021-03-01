@@ -16,6 +16,9 @@
 
 package br.com.listadecompras.zxing.client.android;
 
+import br.com.listadecompras.acitivities.ProdutoActivity;
+import br.com.listadecompras.model.Produto;
+import br.com.listadecompras.model.ProdutoRealm;
 import br.com.listadecompras.webservices.UrlUtils;
 import br.com.listadecompras.zxing.BarcodeFormat;
 import br.com.listadecompras.zxing.DecodeHintType;
@@ -503,25 +506,25 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         String dataLeitura = formatter.format(rawResult.getTimestamp());
 
         try {
-            Call<ResponseBody> callProd = UrlUtils.getService().recuperaProd(dados);
-            callProd.enqueue(new Callback<ResponseBody>() {
+            Call<ProdutoRealm> callProd = UrlUtils.getService().recuperaProd(dados);
+            callProd.enqueue(new Callback<ProdutoRealm>() {
                 @Override
-                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                public void onResponse(Call<ProdutoRealm> call, Response<ProdutoRealm> response) {
                     if (response.isSuccessful()) {
-                        ResponseBody responseBody = response.body();
-                        Log.i("Response", responseBody.toString());
-//                        Bundle bundle = new Bundle();
-//                        bundle.putParcelable("produto", res);
-//                        Intent i = new Intent(CaptureActivity.this, ProdutoActivity.class);
-//                        i.putExtras(bundle);
-//                        startActivity(i);
+                        ProdutoRealm produto = response.body();
+                        Log.i("Response",produto.toString());
+                        Bundle bundle = new Bundle();
+                        bundle.putParcelable("produto", produto);
+                        Intent i = new Intent(CaptureActivity.this, ProdutoActivity.class);
+                        i.putExtras(bundle);
+                        startActivity(i);
                     } else {
                         Toast.makeText(CaptureActivity.this, "Produto nāo encontrado", Toast.LENGTH_LONG).show();
                     }
                 }
 
                 @Override
-                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                public void onFailure(Call<ProdutoRealm> call, Throwable t) {
                     t.getStackTrace();
                     Log.i("ResponseError", t.getMessage());
                 }
@@ -538,7 +541,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 //
 //    intent.putExtras(bundle);
 //    startActivity(intent);
-//        finish();
+        finish();
     }
 
     /**
