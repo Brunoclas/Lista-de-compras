@@ -22,15 +22,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".acitivities.ItensHistoricoActivity"></activity>
-        <activity android:name=".acitivities.HistoricoActivity" />
+        <activity android:name=".ui.acitivities.itensHistorico.ItensHistoricoActivity"></activity>
+        <activity android:name=".ui.acitivities.historico.HistoricoActivity" />
         <activity
-            android:name=".acitivities.ProdutoActivity"
+            android:name=".ui.acitivities.produto.ProdutoActivity"
             android:label="Produto"
-            android:parentActivityName=".acitivities.MainActivity"
+            android:parentActivityName=".ui.acitivities.main.MainActivity"
             android:theme="@style/AppThemeProd" />
         <activity
-            android:name=".acitivities.MainActivity"
+            android:name=".ui.acitivities.main.MainActivity"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

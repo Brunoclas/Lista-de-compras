@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".acitivities.MainActivity">
+    tools:context=".ui.acitivities.main.MainActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/hometbr"
@@ -133,7 +133,7 @@
 
     <!--<fragment-->
         <!--android:id="@+id/fragListProd"-->
-        <!--android:name="br.com.listadecompras.fragments.ListaProdutoFrgment"-->
+        <!--android:name="br.com.listadecompras.ui.fragments.listaProdutoFragment.ListaProdutoFragment"-->
         <!--android:layout_width="0dp"-->
         <!--android:layout_height="0dp"-->
         <!--android:layout_marginStart="8dp"-->

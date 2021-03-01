@@ -16,8 +16,7 @@
 
 package br.com.listadecompras.zxing.client.android;
 
-import br.com.listadecompras.acitivities.ProdutoActivity;
-import br.com.listadecompras.model.Produto;
+import br.com.listadecompras.ui.acitivities.produto.ProdutoActivity;
 import br.com.listadecompras.model.ProdutoRealm;
 import br.com.listadecompras.webservices.UrlUtils;
 import br.com.listadecompras.zxing.BarcodeFormat;
@@ -74,7 +73,6 @@ import java.util.EnumSet;
 import java.util.Map;
 
 import br.com.listadecompras.R;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

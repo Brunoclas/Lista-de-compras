@@ -1,4 +1,4 @@
-package br.com.listadecompras.acitivities;
+package br.com.listadecompras.ui.acitivities.produto;
 
 import android.content.Intent;
 import com.google.android.material.textfield.TextInputEditText;

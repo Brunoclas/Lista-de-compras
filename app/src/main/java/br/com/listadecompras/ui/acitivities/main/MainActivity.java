@@ -1,4 +1,4 @@
-package br.com.listadecompras.acitivities;
+package br.com.listadecompras.ui.acitivities.main;
 
 import android.Manifest;
 import android.app.Activity;
@@ -27,11 +27,10 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.IOException;
-
 import br.com.listadecompras.R;
-import br.com.listadecompras.fragments.ListaProdutoFrgment;
-import br.com.listadecompras.model.Produto;
+import br.com.listadecompras.ui.acitivities.historico.HistoricoActivity;
+import br.com.listadecompras.ui.acitivities.produto.ProdutoActivity;
+import br.com.listadecompras.ui.fragments.listaProdutoFragment.ListaProdutoFragment;
 import br.com.listadecompras.model.ProdutoList;
 import br.com.listadecompras.model.ProdutoRealm;
 import br.com.listadecompras.realm.ConfRealm;
@@ -44,13 +43,12 @@ import br.com.listadecompras.webservices.UrlUtils;
 import br.com.listadecompras.zxing.client.android.CaptureActivity;
 import br.com.listadecompras.zxing.client.android.PreferencesActivity;
 import io.realm.RealmResults;
-import okhttp3.ResponseBody;
 import pl.droidsonroids.jspoon.annotation.Selector;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MainC.View{
 
     private FloatingActionButton btnLerCodigo;
     private TextInputEditText txtInpCodigo;
@@ -71,17 +69,14 @@ public class MainActivity extends AppCompatActivity {
     private double vl_total = 0;
     private long qtde_total = 0;
     private double vlTotal = 0;
-
-    @Selector("#body")
-    public String title;
-    @Selector("#body")
-    public String cod_barras;
+    private MainP mainP;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Permissions.validatePermission(permissoes, this, 1);
+        mainP = new MainP(this);
         inicializaComponentes();
         carregaToobar();
 //        carregaFragment();
@@ -121,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void carregaFragment() {
-        Fragment listaProdFrag = ListaProdutoFrgment.newInstance(1, 0);
+        Fragment listaProdFrag = ListaProdutoFragment.newInstance(1, 0);
         openFragment(listaProdFrag, R.id.fragListProd);
     }
 
@@ -131,7 +126,6 @@ public class MainActivity extends AppCompatActivity {
         ft.replace(frag, fragment);
         ft.addToBackStack(null);
         ft.commit();
-
     }
 
     private void inicializaComponentes() {
@@ -139,9 +133,10 @@ public class MainActivity extends AppCompatActivity {
         btnLerCodigo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivityForResult(new Intent(MainActivity.this, CaptureActivity.class), 1);
+                mainP.view.callBarcodeReader();
             }
         });
+
 
         txtInpCodigo = findViewById(R.id.txtInpCodigo);
         btnBuscar = findViewById(R.id.btnBuscar);
@@ -384,5 +379,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void alerta(String msg) {
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void callBarcodeReader() {
+        startActivityForResult(new Intent(MainActivity.this, CaptureActivity.class), 1);
     }
 }

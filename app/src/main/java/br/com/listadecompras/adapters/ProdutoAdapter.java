@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 import com.squareup.picasso.Picasso;
 
 import br.com.listadecompras.R;
-import br.com.listadecompras.acitivities.MainActivity;
+import br.com.listadecompras.ui.acitivities.main.MainActivity;
 import br.com.listadecompras.holders.ProdutoHolder;
 import br.com.listadecompras.model.ProdutoRealm;
 import br.com.listadecompras.realm.ConfRealm;

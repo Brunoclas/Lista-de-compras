@@ -1,7 +1,5 @@
-package br.com.listadecompras.fragments;
+package br.com.listadecompras.ui.fragments.listaProdutoFragment;
 
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
@@ -26,7 +24,7 @@ import br.com.listadecompras.viewmodel.ProdutoViewModel;
 import io.realm.RealmResults;
 
 
-public class ListaProdutoFrgment extends Fragment implements ProdutoAdapter.OnClickProdListener {
+public class ListaProdutoFragment extends Fragment implements ProdutoAdapter.OnClickProdListener {
 
     private RecyclerView prodRecycler;
     private ConfRealm confRealm;
@@ -80,10 +78,10 @@ public class ListaProdutoFrgment extends Fragment implements ProdutoAdapter.OnCl
         return  produtoRealms;
     }
 
-    public static ListaProdutoFrgment newInstance(int _activity, int _position){
+    public static ListaProdutoFragment newInstance(int _activity, int _position){
         activity = _activity;
         position = _position;
-        return new ListaProdutoFrgment();
+        return new ListaProdutoFragment();
     }
 
     @Override
