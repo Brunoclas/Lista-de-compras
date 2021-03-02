@@ -24,7 +24,7 @@ import br.com.listadecompras.viewmodel.ProdutoViewModel;
 import io.realm.RealmResults;
 
 
-public class ListaProdutoFragment extends Fragment implements ProdutoAdapter.OnClickProdListener {
+public class ListaProdutoFragment extends Fragment implements ProdutoAdapter.OnClickProdListener, ProdutoAdapter.OnClickLongProdListener {
 
     private RecyclerView prodRecycler;
     private ConfRealm confRealm;
@@ -54,7 +54,7 @@ public class ListaProdutoFragment extends Fragment implements ProdutoAdapter.OnC
             linearLayoutManager.setStackFromEnd(true);
             linearLayoutManager.setReverseLayout(true);
             prodRecycler.setLayoutManager(gridLayoutManager);
-            ProdutoAdapter produtoAdapter = new ProdutoAdapter(carregaDados(), this, getActivity());
+            ProdutoAdapter produtoAdapter = new ProdutoAdapter(carregaDados(), this,this, getActivity());
             prodRecycler.setAdapter(produtoAdapter);
         }catch (Exception e){
             e.printStackTrace();
@@ -90,37 +90,18 @@ public class ListaProdutoFragment extends Fragment implements ProdutoAdapter.OnC
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-//        alerta("ListaProdutoFrgment - onStart");
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
 //        alerta("ListaProdutoFrgment - onResume");
             preencheLista();
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-//        alerta("ListaProdutoFrgment - onPause");
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-//        alerta("ListaProdutoFrgment - onStop");
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-//        alerta("ListaProdutoFrgment - onDestroy");
-    }
-
     private void alerta(String msg){
         Toast.makeText(this.getContext(), msg, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onClickLongProdListener(int position) {
+
     }
 }

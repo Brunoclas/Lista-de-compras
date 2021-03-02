@@ -27,13 +27,15 @@ public class ProdutoAdapter extends RecyclerView.Adapter<ProdutoHolder> {
 
     private RealmResults<ProdutoRealm> produtos;
     private OnClickProdListener onClickProdListener;
+    private OnClickLongProdListener onClickLongProdListener;
     private ConfRealm confRealm;
     private Activity activity;
     private View v;
 
-    public ProdutoAdapter(RealmResults<ProdutoRealm> produtos, OnClickProdListener onClickProdListener, Activity activity) {
+    public ProdutoAdapter(RealmResults<ProdutoRealm> produtos, OnClickProdListener onClickProdListener, OnClickLongProdListener onClickLongProdListener, Activity activity) {
         this.produtos = produtos;
         this.onClickProdListener = onClickProdListener;
+        this.onClickLongProdListener = onClickLongProdListener;
         this.activity = activity;
     }
 
@@ -42,7 +44,7 @@ public class ProdutoAdapter extends RecyclerView.Adapter<ProdutoHolder> {
     public ProdutoHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_lista_produto, viewGroup, false);
         this.v = v;
-        return new ProdutoHolder(v, onClickProdListener);
+        return new ProdutoHolder(v, onClickProdListener, onClickLongProdListener);
     }
 
     @Override
@@ -54,9 +56,9 @@ public class ProdutoAdapter extends RecyclerView.Adapter<ProdutoHolder> {
         produtoHolder.txtVlTotal.setText("Vl Total: R$ " + String.format("%.2f", vlTotal));
 
         if(produtos.get(i).getUnidMed().equals("Unidade")) {
-            produtoHolder.txtQtdeProd.setText("Quantidade: " + String.format("%.0f", produtos.get(i).getQtde()));
+            produtoHolder.txtQtdeProd.setText(String.format("%.0f", produtos.get(i).getQtde()));
         }else{
-            produtoHolder.txtQtdeProd.setText("Quantidade: " + produtos.get(i).getQtde());
+            produtoHolder.txtQtdeProd.setText(String.valueOf(produtos.get(i).getQtde()));
         }
 
         Picasso.get()
@@ -65,56 +67,56 @@ public class ProdutoAdapter extends RecyclerView.Adapter<ProdutoHolder> {
                 .centerInside()
                 .into(produtoHolder.imgProdList);
 
-        produtoHolder.btnDeleteProd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
-                builder.setTitle("Atençāo !")
-                        .setMessage("Tem certeza que deseja apagar esse produto?")
-                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                try{
-                                    confRealm = new ConfRealm();
-                                    final RealmResults<ProdutoRealm> produtoRealms = confRealm.realm()
-                                            .where(ProdutoRealm.class)
-                                            .equalTo("status", Utils.EM_PROCESSAMENTO)
-                                            .findAll()
-                                            .sort("id", Sort.DESCENDING);
-
-                                    confRealm.realm().executeTransaction(new Realm.Transaction() {
-                                        @Override
-                                        public void execute(Realm realm) {
-                                            ProdutoRealm produtoRealm =  produtoRealms.get(i);
-                                            produtoRealm.deleteFromRealm();
-                                        }
-                                    });
-                                    produtoRealms.removeAllChangeListeners();
-                                    notifyItemRemoved(i);
-//                                    notifyItemRangeChanged(i, produtoRealms.size());
-                                    v.getContext().startActivity(new Intent(v.getContext(), MainActivity.class));
-                                    activity.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-
-                                }catch (Exception e){
-                                    e.printStackTrace();
-                                }
-                            }
-                        })
-                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                try {
-                                    this.finalize();
-                                } catch (Throwable throwable) {
-                                    throwable.printStackTrace();
-                                }
-                            }
-                        });
-                AlertDialog dialog = builder.create();
-                dialog.show();
-            }
-        });
+//        produtoHolder.btnDeleteProd.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(final View v) {
+//
+//                AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+//                builder.setTitle("Atençāo !")
+//                        .setMessage("Tem certeza que deseja apagar esse produto?")
+//                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//                                try{
+//                                    confRealm = new ConfRealm();
+//                                    final RealmResults<ProdutoRealm> produtoRealms = confRealm.realm()
+//                                            .where(ProdutoRealm.class)
+//                                            .equalTo("status", Utils.EM_PROCESSAMENTO)
+//                                            .findAll()
+//                                            .sort("id", Sort.DESCENDING);
+//
+//                                    confRealm.realm().executeTransaction(new Realm.Transaction() {
+//                                        @Override
+//                                        public void execute(Realm realm) {
+//                                            ProdutoRealm produtoRealm =  produtoRealms.get(i);
+//                                            produtoRealm.deleteFromRealm();
+//                                        }
+//                                    });
+//                                    produtoRealms.removeAllChangeListeners();
+//                                    notifyItemRemoved(i);
+////                                    notifyItemRangeChanged(i, produtoRealms.size());
+//                                    v.getContext().startActivity(new Intent(v.getContext(), MainActivity.class));
+//                                    activity.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+//
+//                                }catch (Exception e){
+//                                    e.printStackTrace();
+//                                }
+//                            }
+//                        })
+//                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//                                try {
+//                                    this.finalize();
+//                                } catch (Throwable throwable) {
+//                                    throwable.printStackTrace();
+//                                }
+//                            }
+//                        });
+//                AlertDialog dialog = builder.create();
+//                dialog.show();
+//            }
+//        });
     }
 
     @Override
@@ -129,5 +131,9 @@ public class ProdutoAdapter extends RecyclerView.Adapter<ProdutoHolder> {
 
     public interface OnClickProdListener{
         void onClickProdListener(int position);
+    }
+
+    public interface OnClickLongProdListener{
+        void onClickLongProdListener(int position);
     }
 }
